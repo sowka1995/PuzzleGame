@@ -26,7 +26,7 @@ namespace Puzzle
         /// <summary>
         /// Lista sąsiednich kawałków
         /// </summary>
-        public List<int> AdjacenctPieceIDs { get; set; }
+        public List<int> AdjacentPieceIDs { get; set; }
 
         /// <summary>
         /// Szerokość kawałka puzzli
