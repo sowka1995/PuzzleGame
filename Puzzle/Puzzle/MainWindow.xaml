@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Puzzle"
         mc:Ignorable="d"
-        Title="Puzzle Game" Height="350" Width="525">
-    <Grid>
+        Title="Puzzle Game" Height="600" Width="600">
+    <Grid Name="mainGrid">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/wood.png"/>
         </Grid.Background>
+        <Canvas Name="canvasRoot">
 
+        </Canvas>
     </Grid>
 </Window>
