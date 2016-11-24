@@ -24,5 +24,23 @@ namespace Puzzle.Class
 
             return piecesBitmaps;
         }
+
+        public static List<int> DetermineAdjacentPieceIDs(List<Coordinate> adjacentCoordinates)
+        {
+            List<int> adjacentPieceIDs = new List<int>();
+
+            foreach (Coordinate coordinate in adjacentCoordinates)
+            {
+                if (coordinate.X >= 0 && coordinate.X < PuzzleSettings.NUM_COLUMNS &&
+                     coordinate.Y >= 0 && coordinate.Y < PuzzleSettings.NUM_ROWS)
+                {
+                    int pieceID = (coordinate.Y * PuzzleSettings.NUM_COLUMNS) + coordinate.X;
+                    adjacentPieceIDs.Add(pieceID);
+                }
+            }
+            adjacentPieceIDs.Sort();
+
+            return adjacentPieceIDs;
+        }
     }
 }

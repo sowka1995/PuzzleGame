@@ -44,6 +44,16 @@ namespace Puzzle
         /// </summary>
         private List<Cluster> _clusters;
 
+        /// <summary>
+        /// Służy do generowania losowej pozycji dla kawałka puzzli
+        /// </summary>
+        private Random _random;
+
+        /// <summary>
+        /// Przechowuje obrazek z którego generujemy puzzle
+        /// </summary>
+        private BitmapImage _sourcePicture;
+
         #endregion 
 
         public MainWindow()
@@ -109,6 +119,79 @@ namespace Puzzle
             }
         }
 
-        #endregion 
+        #endregion
+
+        #region HelperMethods
+
+        private void CreateAndDisplayPuzzle()
+        {
+            int pieceId = 0;
+            int pieceCount = 0;
+
+            var pieces = Engine.CutImageToPieces(_sourcePicture);
+
+            for (int row = 0; row < PuzzleSettings.NUM_ROWS; row++)
+            {
+                for (int col = 0; col < PuzzleSettings.NUM_COLUMNS; col++)
+                {
+                    List<Coordinate> adjacentCoordinates = new List<Coordinate>()
+                    {
+                        new Coordinate(col + 1, row),
+                        new Coordinate(col, row + 1),
+                        new Coordinate(col - 1, row),
+                        new Coordinate(col, row - 1)
+                    };
+
+                    List<int> adjacentPieceIDs = Engine.DetermineAdjacentPieceIDs(adjacentCoordinates);
+
+                    Piece piece = new Piece()
+                    {
+                        Id = pieceId,
+                        ClusterId = pieceId,
+                        AdjacentPieceIDs = adjacentPieceIDs,
+                        Location = new Coordinate(col, row),
+                        Height = Convert.ToInt32(pieces[pieceCount].Height),
+                        Width = Convert.ToInt32(pieces[pieceCount].Width),
+                        Picture = pieces[pieceCount],
+                    };
+
+                    InitPiece(piece);
+
+                    Cluster cluster = new Cluster()
+                    {
+                        Id = pieceId,
+                        Pieces = new List<Piece>() { piece }
+                    };
+
+                    _clusters.Add(cluster);
+
+                    pieceId++;
+                    pieceCount++;
+                }
+            }
+        }
+
+        private void InitPiece(Piece piece)
+        {
+            Image pieceImage = new Image
+            {
+                Source = piece.Picture,
+                Width = piece.Width,
+                Height = piece.Height,
+                Name = "p" + piece.Id
+            };
+
+            pieceImage.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(PieceCluster_MouseLeftButtonDown));
+            pieceImage.AddHandler(MouseMoveEvent, new MouseEventHandler(PieceCluster_MouseMove));
+            pieceImage.AddHandler(MouseUpEvent, new MouseButtonEventHandler(PieceCluster_MouseUp));
+
+            canvasRoot.Children.Add(pieceImage);
+            piece.PieceImage = pieceImage;
+
+            Canvas.SetLeft(pieceImage, _random.Next(0, (int)(mainGrid.ActualWidth - pieceImage.Width)));
+            Canvas.SetTop(pieceImage, _random.Next(0, (int)(mainGrid.ActualHeight - pieceImage.Height)));
+        }
+
+        #endregion
     }
 }

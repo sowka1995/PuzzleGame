@@ -72,7 +72,7 @@
     <Compile Include="Class\Engine.cs" />
     <Compile Include="Class\IPiece.cs" />
     <Compile Include="Class\Piece.cs" />
-    <Compile Include="Class\PieceCluster.cs" />
+    <Compile Include="Class\Cluster.cs" />
     <Compile Include="Class\PuzzleSettings.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
