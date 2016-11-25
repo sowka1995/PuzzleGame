@@ -58,18 +58,35 @@ namespace Puzzle.Class
             double scaleDownRatio = (currentPuzzleDimensionDiffrence / 2) / Math.Max(currentPuzzleHeight, currentPuzzleWidth);
             double scaleUpRatio = (currentPuzzleDimensionDiffrence / 2) / Math.Min(currentPuzzleHeight, currentPuzzleWidth);
 
-            if(PuzzleSettings.NUM_ROWS > PuzzleSettings.NUM_COLUMNS)
+            if(PuzzleSettings.NUM_ROWS >= PuzzleSettings.NUM_COLUMNS)
             {
                 int newPhotoHeight = (int) Math.Round(photoHeight + photoHeight * scaleUpRatio);
                 int newPhotoWidth = (int)Math.Round(photoWidth - photoWidth * scaleDownRatio);
                 this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
             }
 
-            if (PuzzleSettings.NUM_ROWS <= PuzzleSettings.NUM_COLUMNS)
+            if (PuzzleSettings.NUM_ROWS < PuzzleSettings.NUM_COLUMNS)
             {
                 int newPhotoHeight = (int)Math.Round(photoHeight - photoHeight * scaleDownRatio);
                 int newPhotoWidth = (int)Math.Round(photoWidth + photoWidth * scaleUpRatio);
                 this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
+            }
+
+            if (PuzzleSettings.NUM_ROWS == PuzzleSettings.NUM_COLUMNS)
+            {
+                if (photoWidth > photoHeight)
+                {
+                    int newPhotoHeight = (int)Math.Round(photoHeight + photoHeight * scaleUpRatio);
+                    int newPhotoWidth = (int)Math.Round(photoWidth - photoWidth * scaleDownRatio);
+                    this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
+                }
+
+                if (photoWidth < photoHeight)
+                {
+                    int newPhotoHeight = (int)Math.Round(photoHeight - photoHeight * scaleDownRatio);
+                    int newPhotoWidth = (int)Math.Round(photoWidth + photoWidth * scaleUpRatio);
+                    this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
+                }
             }
         }
 
