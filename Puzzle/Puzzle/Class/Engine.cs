@@ -11,8 +11,8 @@ namespace Puzzle.Class
         {
             List<CroppedBitmap> piecesBitmaps = new List<CroppedBitmap>();
 
-            int pieceWidth = Convert.ToInt32(image.Width / PuzzleSettings.NUM_COLUMNS);
-            int pieceHeight = Convert.ToInt32(image.Height / PuzzleSettings.NUM_ROWS);
+            int pieceWidth = Convert.ToInt32(image.PixelWidth / PuzzleSettings.NUM_COLUMNS);
+            int pieceHeight = Convert.ToInt32(image.PixelHeight/ PuzzleSettings.NUM_ROWS);
 
             for (int i = 0; i < PuzzleSettings.NUM_ROWS; i++)
             {
