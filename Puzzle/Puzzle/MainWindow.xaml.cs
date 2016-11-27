@@ -54,11 +54,22 @@ namespace Puzzle
         /// </summary>
         private BitmapImage _sourcePicture;
 
+        /// <summary>
+        /// Przechowuje referencję do okienka startowego aplikacji.
+        /// </summary>
+        private Window _menuWindow;
+
         #endregion 
 
-        public MainWindow()
+        public MainWindow(Window menuWindow)
         {
             InitializeComponent();
+
+            _menuWindow = menuWindow;
+            _previousMousePosition = Mouse.GetPosition(mainGrid);
+            _clusters = new List<Cluster>();
+            _canMovePiece = false;
+            _random = new Random();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -113,8 +124,7 @@ namespace Puzzle
 
             if (_canMovePiece)
             {
-                // TODO: łączenie puzzli
-
+                
                 _canMovePiece = false;
             }
         }
@@ -123,7 +133,7 @@ namespace Puzzle
 
         #region HelperMethods
 
-        private void CreateAndDisplayPuzzle()
+        public void CreateAndDisplayPuzzle()
         {
             int pieceId = 0;
             int pieceCount = 0;
@@ -150,8 +160,8 @@ namespace Puzzle
                         ClusterId = pieceId,
                         AdjacentPieceIDs = adjacentPieceIDs,
                         Location = new Coordinate(col, row),
-                        Height = Convert.ToInt32(pieces[pieceCount].Height),
-                        Width = Convert.ToInt32(pieces[pieceCount].Width),
+                        Height = pieces[pieceCount].Height,
+                        Width = pieces[pieceCount].Width,
                         Picture = pieces[pieceCount],
                     };
 
@@ -169,6 +179,12 @@ namespace Puzzle
                     pieceCount++;
                 }
             }
+        }
+
+
+        public void SetSourcePicture(BitmapImage sourcePicture)
+        {
+            _sourcePicture = sourcePicture;
         }
 
         private void InitPiece(Piece piece)
@@ -193,5 +209,10 @@ namespace Puzzle
         }
 
         #endregion
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _menuWindow.Visibility = Visibility.Visible;
+        }
     }
 }

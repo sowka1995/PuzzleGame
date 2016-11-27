@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
+﻿using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.IO;
 using Puzzle.Class;
 
 namespace Puzzle
@@ -21,7 +9,9 @@ namespace Puzzle
     /// </summary>
     public partial class MenuWindow : Window
     {
-        public MenuWindow()
+        private BitmapImage _sourcePicture;
+
+        public MenuWindow() 
         {
             InitializeComponent();
         }
@@ -31,12 +21,15 @@ namespace Puzzle
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             openFileDialog.Filter = "Photo|*.png;*.jpg;*.jpeg";
 
-            Nullable<bool> openFileResult = openFileDialog.ShowDialog();
+            bool? openFileResult = openFileDialog.ShowDialog();
 
             if (openFileResult == true)
             {
                 Photo insertedPhoto = new Photo(openFileDialog.FileName);
                 insertedPhoto.resize();
+
+                button1.IsEnabled = true;
+                _sourcePicture = insertedPhoto.getBitmapImage();
 
                 // BitmapImage dla wczytanego, przeskalowanego zdjęcia.
                 image.Source = insertedPhoto.getBitmapImage();
@@ -44,6 +37,16 @@ namespace Puzzle
                 // Tymczsowy label pokazujący wymiary zdjęcia po przeskalowaniu.
                 tmpLabel.Content = "(" + insertedPhoto.getBitmapImage().PixelHeight + " / " + PuzzleSettings.NUM_ROWS + ") x (" + insertedPhoto.getBitmapImage().PixelWidth + " / " + PuzzleSettings.NUM_COLUMNS + ")";
             }
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            Visibility = Visibility.Hidden;
+
+            MainWindow mainWindow = new MainWindow(this);
+            mainWindow.Show();
+            mainWindow.SetSourcePicture(_sourcePicture);
+            mainWindow.CreateAndDisplayPuzzle();
         }
     }
 }
