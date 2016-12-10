@@ -59,6 +59,11 @@ namespace Puzzle
         /// </summary>
         private Window _menuWindow;
 
+        /// <summary>
+        /// Określa czy puzzle zostały ułożone
+        /// </summary>
+        private bool _isSolved;
+
         #endregion 
 
         public MainWindow(Window menuWindow)
@@ -122,11 +127,65 @@ namespace Puzzle
         {
             Mouse.OverrideCursor = Cursors.Arrow;
 
-            if (_canMovePiece)
+            if (_canMovePiece && _isSolved)
             {
-                
+                List<int> adjacentClusterIDs = new List<int>();
+
+                // łączenie puzzli
+                for (int i = 0; i < _currentCluster.Pieces.Count; i++)
+                {
+                    Piece currentPiece = _currentCluster.Pieces[i];
+
+                    foreach (int pieceId in currentPiece.AdjacentPieceIDs)
+                    {
+                        Piece adjacentPiece = GetPieceById(pieceId);
+
+                        if (adjacentPiece != null && adjacentPiece.ClusterId != currentPiece.ClusterId)
+                        {
+                            if (Engine.DetermineIfMergePieces(currentPiece, adjacentPiece))
+                            {
+                                Cluster adjacentCluster = GetClusterById(adjacentPiece.ClusterId);
+
+                                adjacentClusterIDs.Add(adjacentCluster.Id);
+
+                                // Aktualizacja ClusterId dla kawałków w sąsiędnim klastrze
+                                foreach (Piece piece in adjacentCluster.Pieces)
+                                {
+                                    piece.ClusterId = currentPiece.ClusterId;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (adjacentClusterIDs.Count > 0)
+                {
+                    foreach (int clusterId in adjacentClusterIDs)
+                    {
+                        Cluster adjacentCluster = GetClusterById(clusterId);
+
+                        foreach (Piece piece in adjacentCluster.Pieces)
+                        {
+                            _currentCluster.Pieces.Add(piece);
+                        }
+
+                        RemoveClusterById(clusterId);
+                    }
+                }
+
+                if (_clusters.Count <= 1)
+                {
+                    MessageBox.Show("Gratulacje, ułożyłeś swoje puzzle!", "Ułożone!!!");
+                    _isSolved = true;
+                }
+
                 _canMovePiece = false;
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _menuWindow.Visibility = Visibility.Visible;
         }
 
         #endregion
@@ -181,7 +240,6 @@ namespace Puzzle
             }
         }
 
-
         public void SetSourcePicture(BitmapImage sourcePicture)
         {
             _sourcePicture = sourcePicture;
@@ -208,11 +266,45 @@ namespace Puzzle
             Canvas.SetTop(pieceImage, _random.Next(0, (int)(mainGrid.ActualHeight - pieceImage.Height)));
         }
 
-        #endregion
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void RemoveClusterById(int clusterId)
         {
-            _menuWindow.Visibility = Visibility.Visible;
+            for (int i = 0; i < _clusters.Count; i++)
+            {
+                if (_clusters[i].Id == clusterId)
+                {
+                    _clusters.RemoveAt(i);
+                    break;
+                }
+            }
         }
+
+        private Piece GetPieceById(int pieceId)
+        {
+            foreach (Cluster cluster in _clusters)
+            {
+                foreach (Piece piece in cluster.Pieces)
+                {
+                    if (piece.Id == pieceId)
+                        return piece;
+                }
+            }
+
+            return null;
+        }
+
+        private Cluster GetClusterById(int clusterId)
+        {
+            foreach (Cluster cluster in _clusters)
+            {
+                if (cluster.Id == clusterId)
+                {
+                    return cluster;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace Puzzle.Class
@@ -41,6 +42,36 @@ namespace Puzzle.Class
             adjacentPieceIDs.Sort();
 
             return adjacentPieceIDs;
+        }
+
+        public static bool DetermineIfMergePieces(Piece currentPiece, Piece adjacentPiece)
+        {
+            if (adjacentPiece.ClusterId != currentPiece.ClusterId)
+            {
+                double topPositionDifference = Canvas.GetTop(currentPiece.PieceImage) - Canvas.GetTop(adjacentPiece.PieceImage);
+                double leftPositionDifference = Canvas.GetLeft(currentPiece.PieceImage) - Canvas.GetLeft(adjacentPiece.PieceImage);
+
+                // Sklejanie kawałków które przykładane są z lewej bądź prawej strony
+                if (currentPiece.Location.Y == adjacentPiece.Location.Y && Math.Abs(topPositionDifference) <= PuzzleSettings.SNAP_TOLERANCE)
+                {
+                    if ((currentPiece.Location.X + 1 == adjacentPiece.Location.X && Math.Abs(leftPositionDifference + currentPiece.Width) <= PuzzleSettings.SNAP_TOLERANCE) ||
+                         (currentPiece.Location.X - 1 == adjacentPiece.Location.X && Math.Abs(leftPositionDifference - currentPiece.Width) <= PuzzleSettings.SNAP_TOLERANCE))
+                    {
+                        return true;
+                    }
+                }
+                // Sklejanie kawałków które przykładane są z góry bądź z dołu
+                else if (currentPiece.Location.X == adjacentPiece.Location.X && Math.Abs(leftPositionDifference) <= PuzzleSettings.SNAP_TOLERANCE)
+                {
+                    if ((currentPiece.Location.Y - 1 == adjacentPiece.Location.Y && Math.Abs(topPositionDifference - currentPiece.Height) <= PuzzleSettings.SNAP_TOLERANCE) ||
+                         (currentPiece.Location.Y + 1 == adjacentPiece.Location.Y && Math.Abs(topPositionDifference + currentPiece.Height) <= PuzzleSettings.SNAP_TOLERANCE))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -10,5 +10,7 @@ namespace Puzzle.Class
     {
         public static int NUM_ROWS = 3;
         public static int NUM_COLUMNS = 5;
+
+        public static readonly int SNAP_TOLERANCE = 10;
     }
 }
