@@ -137,7 +137,7 @@ namespace Puzzle
             Mouse.OverrideCursor = Cursors.Arrow;
             Engine.DeleteShadowEffect(_currentCluster, ref _zindex);
 
-            if (_canMovePiece && _isSolved)
+            if (_canMovePiece && !_isSolved)
             {
                 List<int> adjacentClusterIDs = new List<int>();
 
