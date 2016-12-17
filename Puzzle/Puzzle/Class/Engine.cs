@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 
 namespace Puzzle.Class
@@ -74,7 +76,6 @@ namespace Puzzle.Class
             return false;
         }
 
-
         public static void DeleteShadowEffect(Cluster cluster, ref int zindex)
         {
             foreach (Piece piece in cluster.Pieces)
@@ -85,7 +86,19 @@ namespace Puzzle.Class
             zindex++;
         }
 
-
-
+        public static void DropShadowEffect(Cluster cluster)
+        {
+            foreach (Piece piece in cluster.Pieces)
+            {
+                piece.PieceImage.Effect = new DropShadowEffect()
+                {
+                    Color = new Color() { A = 2, R = 0, G = 0, B = 0 },
+                    Direction = -90,
+                    ShadowDepth = 1.5d,
+                    Opacity = 2,
+                };
+                Panel.SetZIndex(piece.PieceImage, int.MaxValue);
+            }
+        }
     }
 }

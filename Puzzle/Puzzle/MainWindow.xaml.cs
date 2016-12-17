@@ -128,6 +128,8 @@ namespace Puzzle
                     }
                 }
             }
+
+            Engine.DropShadowEffect(_currentCluster);
         }
 
         private void PieceCluster_MouseUp(object sender, MouseButtonEventArgs e)
