@@ -27,67 +27,109 @@ namespace Puzzle.Class
         }
 
         /// <summary>
-        /// Metoda sprawdza czy zdjęcie ma odpowiednie rozmiary do generacji puzzli.
+        /// Metoda sprawdza czy zdjęcie ma rozmiary mniejsze niż obszar roboczy.
         /// </summary>
-        /// <returns>
-        /// Boolean:
-        /// true - jeżeli obraz ma odpowiednie rozmiary,
-        /// false - jeżli obraz nie ma odpowiednich rozmiarów.
-        /// </returns>
-        public bool isValid()
+        /// <returns></returns>
+        private bool hasCorrectSize()
         {
-            int photoHeight = this.bitmap.Height;
-            int photoWidth = this.bitmap.Width;
-            
-            return photoHeight / PuzzleSettings.NUM_ROWS == photoWidth / PuzzleSettings.NUM_COLUMNS;
+            return (this.bitmap.Width <= PuzzleSettings.WORKSPACE_WIDTH && this.bitmap.Height <= PuzzleSettings.WORKSPACE_HEIGHT);
         }
 
         /// <summary>
-        /// Metoda skaluje zdjęcie (odpowiednio je rozciąga lub zwęża) tak by można było z niego wygenerować puzzle których parametry są zdefiniowane w ustawieniach.
+        /// Metoda sprawdza czy zdjęcie ma odpowiednie proporcje by można było utworzyć z niego kwadratowe puzzle.
         /// </summary>
-        public void resize()
+        /// <returns></returns>
+        private bool hasCorrectProportions()
         {
-            int photoHeight = this.bitmap.Height;
-            int photoWidth = this.bitmap.Width;
+            return (this.bitmap.Width / PuzzleSettings.NUM_COLUMNS == this.bitmap.Height / PuzzleSettings.NUM_ROWS);
+        }
 
-            double currentPuzzleHeight = photoHeight / PuzzleSettings.NUM_ROWS;
-            double currentPuzzleWidth = photoWidth / PuzzleSettings.NUM_COLUMNS;
+        /// <summary>
+        /// Metoda wylicza proporcjonalnie pomnijeszony rozmiar dla zdjęcia tak by zmieściło się ono w obszarze roboczym.
+        /// </summary>
+        /// <returns></returns>
+        public Size getDecresedSize()
+        {
+            int newWidth = this.bitmap.Width;
+            int newHeight = this.bitmap.Height;
 
-            double currentPuzzleDimensionDiffrence = Math.Abs(currentPuzzleHeight - currentPuzzleWidth);
- 
-            double scaleDownRatio = (currentPuzzleDimensionDiffrence / 2) / Math.Max(currentPuzzleHeight, currentPuzzleWidth);
-            double scaleUpRatio = (currentPuzzleDimensionDiffrence / 2) / Math.Min(currentPuzzleHeight, currentPuzzleWidth);
-
-            if(PuzzleSettings.NUM_ROWS >= PuzzleSettings.NUM_COLUMNS)
+            while(newWidth > PuzzleSettings.WORKSPACE_WIDTH || newHeight > PuzzleSettings.WORKSPACE_HEIGHT)
             {
-                int newPhotoHeight = (int) Math.Round(photoHeight + photoHeight * scaleUpRatio);
-                int newPhotoWidth = (int)Math.Round(photoWidth - photoWidth * scaleDownRatio);
-                this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
-            }
-
-            if (PuzzleSettings.NUM_ROWS < PuzzleSettings.NUM_COLUMNS)
-            {
-                int newPhotoHeight = (int)Math.Round(photoHeight - photoHeight * scaleDownRatio);
-                int newPhotoWidth = (int)Math.Round(photoWidth + photoWidth * scaleUpRatio);
-                this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
-            }
-
-            if (PuzzleSettings.NUM_ROWS == PuzzleSettings.NUM_COLUMNS)
-            {
-                if (photoWidth > photoHeight)
+                if(newWidth > PuzzleSettings.WORKSPACE_WIDTH)
                 {
-                    int newPhotoHeight = (int)Math.Round(photoHeight + photoHeight * scaleUpRatio);
-                    int newPhotoWidth = (int)Math.Round(photoWidth - photoWidth * scaleDownRatio);
-                    this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
+                    int widthDiffrence = this.bitmap.Width - PuzzleSettings.WORKSPACE_WIDTH;
+                    double scaleHeightRatio = (double)widthDiffrence / (double)this.bitmap.Width;
+
+                    newWidth = PuzzleSettings.WORKSPACE_WIDTH;
+                    newHeight = this.bitmap.Height - (int)(this.bitmap.Height * scaleHeightRatio);
                 }
 
-                if (photoWidth < photoHeight)
+                if(newHeight > PuzzleSettings.WORKSPACE_HEIGHT)
                 {
-                    int newPhotoHeight = (int)Math.Round(photoHeight - photoHeight * scaleDownRatio);
-                    int newPhotoWidth = (int)Math.Round(photoWidth + photoWidth * scaleUpRatio);
-                    this.bitmap = new Bitmap(this.bitmap, new Size(newPhotoWidth, newPhotoHeight));
+                    int heightDiffence = this.bitmap.Height - PuzzleSettings.WORKSPACE_HEIGHT;
+                    double scaleWidthRatio = (double)heightDiffence / (double)this.bitmap.Height;
+
+                    newWidth = this.bitmap.Width - (int)(this.bitmap.Width * scaleWidthRatio);
+                    newHeight = PuzzleSettings.WORKSPACE_HEIGHT;
                 }
             }
+
+            return new Size(newWidth, newHeight);
+        }
+        
+        /// <summary>
+        /// Metoda wylicza przeskalowany rozmiar dla zdjęcia tak by można było utworzyć z niego kwadaratowe puzzle.
+        /// </summary>
+        /// <returns></returns>
+        public Size getScaledSize()
+        {
+            int newWidth = 0;
+            int newHeight = 0;
+
+            int puzzleWidth = this.bitmap.Width / PuzzleSettings.NUM_COLUMNS;
+            int puzzleHeight = this.bitmap.Height / PuzzleSettings.NUM_ROWS;
+
+            int puzzleSizeDiffrence = Math.Abs(puzzleHeight - puzzleWidth);
+
+            if(puzzleWidth > puzzleHeight)
+            {
+                int newPuzzleWidth = puzzleWidth - puzzleSizeDiffrence / 2;
+                int newPuzzleHeight = puzzleHeight + puzzleSizeDiffrence / 2;
+
+                newWidth = newPuzzleWidth * PuzzleSettings.NUM_COLUMNS;
+                newHeight = newPuzzleHeight * PuzzleSettings.NUM_ROWS;
+            }
+
+            if (puzzleWidth < puzzleHeight)
+            {
+                int newPuzzleWidth = puzzleWidth + puzzleSizeDiffrence / 2;
+                int newPuzzleHeight = puzzleHeight - puzzleSizeDiffrence / 2;
+
+                newWidth = newPuzzleWidth * PuzzleSettings.NUM_COLUMNS;
+                newHeight = newPuzzleHeight * PuzzleSettings.NUM_ROWS;
+            }
+
+            if(puzzleHeight == puzzleWidth)
+            {
+                newWidth = this.bitmap.Width;
+                newHeight = this.bitmap.Height;
+            }
+
+            return new Size(newWidth, newHeight);
+        }
+
+        /// <summary>
+        /// Metoda przygotowuje zdjęcie pod generacje puzzli.
+        /// 1. Skaluje odpowiednio zdjęcie tak by można było utworzyć z niego kwadratowe puzzle.
+        /// 2. Zmniejsza proporcjonalnie rozmiar zdjęcia tak by mieściło się ono w obszarze roboczym.
+        /// </summary>
+        public void preapre()
+        {
+            if (!this.hasCorrectProportions())
+                this.bitmap = new Bitmap(this.bitmap, this.getScaledSize());
+
+            if(!this.hasCorrectSize())
+                this.bitmap = new Bitmap(this.bitmap, this.getDecresedSize());
         }
 
         public BitmapImage getBitmapImage()

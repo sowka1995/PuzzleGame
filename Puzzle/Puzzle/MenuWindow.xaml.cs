@@ -26,16 +26,16 @@ namespace Puzzle
             if (openFileResult == true)
             {
                 Photo insertedPhoto = new Photo(openFileDialog.FileName);
-                insertedPhoto.resize();
+                insertedPhoto.preapre();
 
                 button1.IsEnabled = true;
                 _sourcePicture = insertedPhoto.getBitmapImage();
 
-                // BitmapImage dla wczytanego, przeskalowanego zdjęcia.
-                image.Source = insertedPhoto.getBitmapImage();
-
-                // Tymczsowy label pokazujący wymiary zdjęcia po przeskalowaniu.
-                tmpLabel.Content = "(" + insertedPhoto.getBitmapImage().PixelHeight + " / " + PuzzleSettings.NUM_ROWS + ") x (" + insertedPhoto.getBitmapImage().PixelWidth + " / " + PuzzleSettings.NUM_COLUMNS + ")";
+                // Podgląd wczytanego i przygotowanego zdjęcia.
+                image.Source = _sourcePicture;
+                
+                //tmpLabel.Content = insertedPhoto.getScaledSize().ToString();
+                //tmpLabel.Content = insertedPhoto.getDecresedSize().ToString();
             }
         }
 
