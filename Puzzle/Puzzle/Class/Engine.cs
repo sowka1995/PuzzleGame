@@ -73,5 +73,19 @@ namespace Puzzle.Class
 
             return false;
         }
+
+
+        public static void DeleteShadowEffect(Cluster cluster, ref int zindex)
+        {
+            foreach (Piece piece in cluster.Pieces)
+            {
+                piece.PieceImage.ClearValue(UIElement.EffectProperty);
+                Panel.SetZIndex(piece.PieceImage, zindex);
+            }
+            zindex++;
+        }
+
+
+
     }
 }

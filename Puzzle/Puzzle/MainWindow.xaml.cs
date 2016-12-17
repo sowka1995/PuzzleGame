@@ -64,6 +64,13 @@ namespace Puzzle
         /// </summary>
         private bool _isSolved;
 
+
+        /// <summary>
+        /// Służy do wyciągania na pierwszy plan przenoszonych kawałków puzzli
+        /// </summary>
+        private int _zindex = 1;
+
+
         #endregion 
 
         public MainWindow(Window menuWindow)
@@ -126,6 +133,7 @@ namespace Puzzle
         private void PieceCluster_MouseUp(object sender, MouseButtonEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Arrow;
+            Engine.DeleteShadowEffect(_currentCluster, ref _zindex);
 
             if (_canMovePiece && _isSolved)
             {
