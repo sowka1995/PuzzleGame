@@ -163,6 +163,10 @@ namespace Puzzle
                                 {
                                     piece.ClusterId = currentPiece.ClusterId;
                                 }
+
+                                // usuwanie zbędnęgo już obracania kawałka puzzli po ich złączeniu (jeżeli złączono to muszą być już obrócone w dobrą stronę)
+                                currentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
+                                adjacentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
                             }
                         }
                     }
@@ -265,6 +269,7 @@ namespace Puzzle
                     };
 
                     InitPiece(piece);
+                    Engine.RotatePieceRandom(ref piece);
 
                     Cluster cluster = new Cluster()
                     {
@@ -298,6 +303,7 @@ namespace Puzzle
             pieceImage.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(PieceCluster_MouseLeftButtonDown));
             pieceImage.AddHandler(MouseMoveEvent, new MouseEventHandler(PieceCluster_MouseMove));
             pieceImage.AddHandler(MouseUpEvent, new MouseButtonEventHandler(PieceCluster_MouseUp));
+            pieceImage.AddHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
 
             canvasRoot.Children.Add(pieceImage);
             piece.PieceImage = pieceImage;

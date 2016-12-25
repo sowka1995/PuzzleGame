@@ -50,6 +50,10 @@ namespace Puzzle.Class
 
         public static bool DetermineIfMergePieces(Piece currentPiece, Piece adjacentPiece)
         {
+            // jeżeli obrót jest różny od 0 to nie można scalić dwóch kawałków
+            if (currentPiece.Rotation != 0 || adjacentPiece.Rotation != 0)
+                return false;
+
             if (adjacentPiece.ClusterId != currentPiece.ClusterId)
             {
                 double topPositionDifference = Canvas.GetTop(currentPiece.PieceImage) - Canvas.GetTop(adjacentPiece.PieceImage);
