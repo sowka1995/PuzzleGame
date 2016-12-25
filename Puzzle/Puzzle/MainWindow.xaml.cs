@@ -193,6 +193,36 @@ namespace Puzzle
             }
         }
 
+        private void PieceCluster_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            Image pieceImage = sender as Image;
+
+            if (pieceImage != null)
+            {
+                Matrix matrix = pieceImage.RenderTransform.Value;
+
+                int pieceId = int.Parse(pieceImage.Name.Substring(1)); // id z nazwy 
+                Piece piece = GetPieceById(pieceId);
+
+                if (e.RightButton == MouseButtonState.Pressed)
+                {
+                    double centerX = piece.PieceImage.ActualWidth / 2;
+                    double centerY = piece.PieceImage.ActualHeight / 2;
+
+                    int sign = Math.Sign(e.Delta);
+
+                    matrix.RotateAtPrepend(90 * sign, centerX, centerY);
+                    if (piece.Rotation == 270 * sign)
+                        piece.Rotation = 0;
+                    else
+                        piece.Rotation += 90 * sign;
+                }
+
+                MatrixTransform matrixTransform = new MatrixTransform(matrix);
+                piece.PieceImage.RenderTransform = matrixTransform;
+            }
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             _menuWindow.Visibility = Visibility.Visible;
