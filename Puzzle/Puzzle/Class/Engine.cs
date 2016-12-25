@@ -10,6 +10,8 @@ namespace Puzzle.Class
 {
     internal class Engine
     {
+        private static readonly Random _random = new Random();
+
         public static List<CroppedBitmap> CutImageToPieces(BitmapImage image)
         {
             List<CroppedBitmap> piecesBitmaps = new List<CroppedBitmap>();
@@ -99,6 +101,23 @@ namespace Puzzle.Class
                 };
                 Panel.SetZIndex(piece.PieceImage, int.MaxValue);
             }
+        }
+
+        public static void RotatePieceRandom(ref Piece pieceToRotate)
+        {
+            Matrix matrix = pieceToRotate.PieceImage.RenderTransform.Value;
+
+            int[] degrees = { 0, 90, 180, 270 };
+            int rotation = degrees[_random.Next(0, degrees.Length)];
+
+            double centerX = pieceToRotate.Width / 2;
+            double centerY = pieceToRotate.Height / 2;
+
+            pieceToRotate.Rotation = rotation;
+            matrix.RotateAtPrepend(rotation, centerX, centerY);
+
+            MatrixTransform matrixTransform = new MatrixTransform(matrix);
+            pieceToRotate.PieceImage.RenderTransform = matrixTransform;
         }
     }
 }
