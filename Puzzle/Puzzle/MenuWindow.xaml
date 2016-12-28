@@ -5,11 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Puzzle"
         mc:Ignorable="d"
-        Title="MenuWindow" Width="300" Height="300">
-    <Grid>
-        <Button x:Name="button" HorizontalAlignment="Left" Margin="207,239,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.04,0.6" Content="Wybierz" Click="button_Click"/>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="221" VerticalAlignment="Top" Width="272" Margin="10,10,0,0"/>
-        <Button x:Name="button1" Content="Generuj" HorizontalAlignment="Left" Margin="127,239,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="button1_Click"/>
+        Title="MenuWindow" Width="630" Height="500"
+        ResizeMode="NoResize">
+    <Grid Margin="0,0,2,0">
+        <Grid.Background>
+            <ImageBrush ImageSource="Resources/backg.png"/>
+        </Grid.Background>
+        <Button x:Name="button" HorizontalAlignment="Right" Margin="0,0,219,156" VerticalAlignment="Bottom" Width="185" RenderTransformOrigin="1.04,0.6" Content="Nowa Gra" Click="button_Click" Height="35" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
+        <Image x:Name="image" HorizontalAlignment="Right" Height="221" VerticalAlignment="Bottom" Width="272" Margin="0,0,165,211"/>
         <Label x:Name="tmpLabel" Content="" HorizontalAlignment="Left" Margin="10,233,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="button1" Content="Zakończ" HorizontalAlignment="Right" Margin="0,0,219,91" VerticalAlignment="Bottom" Width="185" Click="button1_Click_1" Height="34" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
     </Grid>
 </Window>

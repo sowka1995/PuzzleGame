@@ -27,26 +27,21 @@ namespace Puzzle
             {
                 Photo insertedPhoto = new Photo(openFileDialog.FileName);
                 insertedPhoto.preapre();
-
-                button1.IsEnabled = true;
                 _sourcePicture = insertedPhoto.getBitmapImage();
 
-                // Podgląd wczytanego i przygotowanego zdjęcia.
-                image.Source = _sourcePicture;
-                
-                //tmpLabel.Content = insertedPhoto.getScaledSize().ToString();
-                //tmpLabel.Content = insertedPhoto.getDecresedSize().ToString();
-            }
-        }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            Visibility = Visibility.Hidden;
+            }
 
             MainWindow mainWindow = new MainWindow(this);
             mainWindow.Show();
             mainWindow.SetSourcePicture(_sourcePicture);
             mainWindow.CreateAndDisplayPuzzle();
+        }
+
+
+        private void button1_Click_1(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
