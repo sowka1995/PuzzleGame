@@ -84,6 +84,9 @@ namespace Puzzle.Class
 
         public static void DeleteShadowEffect(Cluster cluster, ref int zindex)
         {
+            if (cluster == null)
+                return;
+
             foreach (Piece piece in cluster.Pieces)
             {
                 piece.PieceImage.ClearValue(UIElement.EffectProperty);
@@ -94,6 +97,9 @@ namespace Puzzle.Class
 
         public static void DropShadowEffect(Cluster cluster)
         {
+            if (cluster == null)
+                return;
+
             foreach (Piece piece in cluster.Pieces)
             {
                 piece.PieceImage.Effect = new DropShadowEffect()
