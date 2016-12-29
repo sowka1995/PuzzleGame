@@ -134,68 +134,7 @@ namespace Puzzle
 
         private void PieceCluster_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            Mouse.OverrideCursor = Cursors.Arrow;
-            Engine.DeleteShadowEffect(_currentCluster, ref _zindex);
-
-            if (_canMovePiece && !_isSolved)
-            {
-                List<int> adjacentClusterIDs = new List<int>();
-
-                // łączenie puzzli
-                for (int i = 0; i < _currentCluster.Pieces.Count; i++)
-                {
-                    Piece currentPiece = _currentCluster.Pieces[i];
-
-                    foreach (int pieceId in currentPiece.AdjacentPieceIDs)
-                    {
-                        Piece adjacentPiece = GetPieceById(pieceId);
-
-                        if (adjacentPiece != null && adjacentPiece.ClusterId != currentPiece.ClusterId)
-                        {
-                            if (Engine.DetermineIfMergePieces(currentPiece, adjacentPiece))
-                            {
-                                Cluster adjacentCluster = GetClusterById(adjacentPiece.ClusterId);
-
-                                adjacentClusterIDs.Add(adjacentCluster.Id);
-
-                                // Aktualizacja ClusterId dla kawałków w sąsiędnim klastrze
-                                foreach (Piece piece in adjacentCluster.Pieces)
-                                {
-                                    piece.ClusterId = currentPiece.ClusterId;
-                                }
-
-                                // usuwanie zbędnęgo już obracania kawałka puzzli po ich złączeniu (jeżeli złączono to muszą być już obrócone w dobrą stronę)
-                                currentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
-                                adjacentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
-                            }
-                        }
-                    }
-                }
-
-                if (adjacentClusterIDs.Count > 0)
-                {
-                    foreach (int clusterId in adjacentClusterIDs)
-                    {
-                        Cluster adjacentCluster = GetClusterById(clusterId);
-
-                        foreach (Piece piece in adjacentCluster.Pieces)
-                        {
-                            _currentCluster.Pieces.Add(piece);
-                        }
-                        Engine.AlignPiecesPositions(ref _currentCluster);
-
-                        RemoveClusterById(clusterId);
-                    }
-                }
-
-                if (_clusters.Count <= 1)
-                {
-                    MessageBox.Show("Gratulacje, ułożyłeś swoje puzzle!", "Ułożone!!!");
-                    _isSolved = true;
-                }
-
-                _canMovePiece = false;
-            }
+            CheckAndMergePieces();
         }
 
         private void PieceCluster_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -225,6 +164,13 @@ namespace Puzzle
 
                 MatrixTransform matrixTransform = new MatrixTransform(matrix);
                 piece.PieceImage.RenderTransform = matrixTransform;
+
+                if (piece.Rotation == 0)
+                {
+                    _canMovePiece = true;
+                    CheckAndMergePieces();
+                    _canMovePiece = false;
+                }
             }
         }
 
@@ -350,6 +296,72 @@ namespace Puzzle
             }
 
             return null;
+        }
+
+        private void CheckAndMergePieces()
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
+            Engine.DeleteShadowEffect(_currentCluster, ref _zindex);
+
+            if (_canMovePiece && !_isSolved)
+            {
+                List<int> adjacentClusterIDs = new List<int>();
+
+                // łączenie puzzli
+                for (int i = 0; i < _currentCluster.Pieces.Count; i++)
+                {
+                    Piece currentPiece = _currentCluster.Pieces[i];
+
+                    foreach (int pieceId in currentPiece.AdjacentPieceIDs)
+                    {
+                        Piece adjacentPiece = GetPieceById(pieceId);
+
+                        if (adjacentPiece != null && adjacentPiece.ClusterId != currentPiece.ClusterId)
+                        {
+                            if (Engine.DetermineIfMergePieces(currentPiece, adjacentPiece))
+                            {
+                                Cluster adjacentCluster = GetClusterById(adjacentPiece.ClusterId);
+
+                                adjacentClusterIDs.Add(adjacentCluster.Id);
+
+                                // Aktualizacja ClusterId dla kawałków w sąsiędnim klastrze
+                                foreach (Piece piece in adjacentCluster.Pieces)
+                                {
+                                    piece.ClusterId = currentPiece.ClusterId;
+                                }
+
+                                // usuwanie zbędnęgo już obracania kawałka puzzli po ich złączeniu (jeżeli złączono to muszą być już obrócone w dobrą stronę)
+                                currentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
+                                adjacentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
+                            }
+                        }
+                    }
+                }
+
+                if (adjacentClusterIDs.Count > 0)
+                {
+                    foreach (int clusterId in adjacentClusterIDs)
+                    {
+                        Cluster adjacentCluster = GetClusterById(clusterId);
+
+                        foreach (Piece piece in adjacentCluster.Pieces)
+                        {
+                            _currentCluster.Pieces.Add(piece);
+                        }
+                        Engine.AlignPiecesPositions(ref _currentCluster);
+
+                        RemoveClusterById(clusterId);
+                    }
+                }
+
+                if (_clusters.Count <= 1)
+                {
+                    MessageBox.Show("Gratulacje, ułożyłeś swoje puzzle!", "Ułożone!!!");
+                    _isSolved = true;
+                }
+
+                _canMovePiece = false;
+            }
         }
 
         #endregion
