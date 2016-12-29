@@ -125,7 +125,7 @@ namespace Puzzle.Class
                 piece.PieceImage.Effect = new DropShadowEffect()
                 {
                     Color = new Color() { A = 2, R = 0, G = 0, B = 0 },
-                    Direction = -90,
+                    Direction = piece.Rotation - 90,
                     ShadowDepth = 1.5d,
                     Opacity = 2,
                 };
