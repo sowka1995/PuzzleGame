@@ -182,6 +182,7 @@ namespace Puzzle
                         {
                             _currentCluster.Pieces.Add(piece);
                         }
+                        Engine.AlignPiecesPositions(ref _currentCluster);
 
                         RemoveClusterById(clusterId);
                     }
