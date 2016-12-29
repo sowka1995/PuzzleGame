@@ -15,5 +15,6 @@ namespace Puzzle.Class
         public static int WORKSPACE_HEIGHT = 1024;
 
         public static readonly int SNAP_TOLERANCE = 10;
+        public static readonly int SPACE_BETWEEN_PIECES = 1; // w pikselach
     }
 }

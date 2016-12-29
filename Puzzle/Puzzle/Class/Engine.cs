@@ -82,6 +82,26 @@ namespace Puzzle.Class
             return false;
         }
 
+        public static void AlignPiecesPositions(ref Cluster cluster)
+        {
+            Piece mainPiece = cluster.Pieces[0];
+
+            foreach (Piece piece in cluster.Pieces)
+            {
+                int differenceX = mainPiece.Location.X - piece.Location.X;
+                int differenceY = mainPiece.Location.Y - piece.Location.Y;
+
+                double canvasLeft = Canvas.GetLeft(mainPiece.PieceImage) - mainPiece.Width * differenceX;
+                double canvasTop = Canvas.GetTop(mainPiece.PieceImage) - mainPiece.Height * differenceY;
+
+                canvasTop -= PuzzleSettings.SPACE_BETWEEN_PIECES * differenceY;
+                canvasLeft -= PuzzleSettings.SPACE_BETWEEN_PIECES * differenceX;
+
+                Canvas.SetTop(piece.PieceImage, canvasTop);
+                Canvas.SetLeft(piece.PieceImage, canvasLeft);
+            }
+        }
+
         public static void DeleteShadowEffect(Cluster cluster, ref int zindex)
         {
             if (cluster == null)
