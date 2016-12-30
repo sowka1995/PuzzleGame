@@ -64,6 +64,10 @@ namespace Puzzle
         /// </summary>
         private bool _isSolved;
 
+        /// <summary>
+        /// Przechowuje referencję do puzzla który jest obserwowany przez klawiaturę
+        /// </summary>
+        private Image _currentFocusImage;
 
         /// <summary>
         /// Służy do wyciągania na pierwszy plan przenoszonych kawałków puzzli
@@ -132,6 +136,24 @@ namespace Puzzle
             Engine.DropShadowEffect(_currentCluster);
         }
 
+        private void PieceCluster_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Image image = sender as Image;
+            image.Focusable = true;
+            _currentFocusImage = image;
+
+            Keyboard.Focus(_currentFocusImage);
+        }
+
+        private void PieceCluster_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_currentFocusImage != null)
+            {
+                _currentFocusImage.Focusable = false;
+                Keyboard.Focus(canvasRoot);
+            }
+        }
+
         private void PieceCluster_MouseUp(object sender, MouseButtonEventArgs e)
         {
             CheckAndMergePieces();
@@ -166,6 +188,43 @@ namespace Puzzle
                 piece.PieceImage.RenderTransform = matrixTransform;
 
                 if (piece.Rotation == 0)
+                {
+                    _canMovePiece = true;
+                    CheckAndMergePieces();
+                    _canMovePiece = false;
+                }
+            }
+        }
+
+        private void PieceCluster_KeyDown(object sender, KeyEventArgs e)
+        {
+            Image pieceImage = sender as Image;
+
+            if (pieceImage != null && Mouse.RightButton == MouseButtonState.Pressed)
+            {
+                Matrix matrix = pieceImage.RenderTransform.Value;
+
+                int pieceId = int.Parse(pieceImage.Name.Substring(1)); // id z nazwy 
+                Piece piece = GetPieceById(pieceId);
+
+                if (e.Key == Key.Left || e.Key == Key.Right)
+                {
+                    double centerX = piece.PieceImage.ActualWidth / 2;
+                    double centerY = piece.PieceImage.ActualHeight / 2;
+
+                    int sign = e.Key == Key.Left ? -1 : 1;
+
+                    matrix.RotateAtPrepend(90 * sign, centerX, centerY);
+                    if (piece.Rotation == 270 * sign)
+                        piece.Rotation = 0;
+                    else
+                        piece.Rotation += 90 * sign;
+                }
+
+                MatrixTransform matrixTransform = new MatrixTransform(matrix);
+                piece.PieceImage.RenderTransform = matrixTransform;
+
+                if (piece.Rotation == 0 && _currentCluster != null)
                 {
                     _canMovePiece = true;
                     CheckAndMergePieces();
@@ -246,11 +305,15 @@ namespace Puzzle
                 Height = piece.Height,
                 Name = "p" + piece.Id
             };
+            pieceImage.FocusVisualStyle = null;
 
             pieceImage.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(PieceCluster_MouseLeftButtonDown));
+            pieceImage.AddHandler(MouseRightButtonDownEvent, new MouseButtonEventHandler(PieceCluster_MouseRightButtonDown));
+            pieceImage.AddHandler(MouseRightButtonUpEvent, new MouseButtonEventHandler(PieceCluster_MouseRightButtonUp));
             pieceImage.AddHandler(MouseMoveEvent, new MouseEventHandler(PieceCluster_MouseMove));
             pieceImage.AddHandler(MouseUpEvent, new MouseButtonEventHandler(PieceCluster_MouseUp));
             pieceImage.AddHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
+            pieceImage.AddHandler(KeyDownEvent, new KeyEventHandler(PieceCluster_KeyDown));
 
             canvasRoot.Children.Add(pieceImage);
             piece.PieceImage = pieceImage;
@@ -332,7 +395,13 @@ namespace Puzzle
 
                                 // usuwanie zbędnęgo już obracania kawałka puzzli po ich złączeniu (jeżeli złączono to muszą być już obrócone w dobrą stronę)
                                 currentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
+                                currentPiece.PieceImage.RemoveHandler(KeyDownEvent, new KeyEventHandler(PieceCluster_KeyDown));
+                                currentPiece.PieceImage.RemoveHandler(MouseRightButtonDownEvent, new MouseButtonEventHandler(PieceCluster_MouseRightButtonDown));
+                                currentPiece.PieceImage.RemoveHandler(MouseRightButtonUpEvent, new MouseButtonEventHandler(PieceCluster_MouseRightButtonUp));
                                 adjacentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
+                                adjacentPiece.PieceImage.RemoveHandler(KeyDownEvent, new KeyEventHandler(PieceCluster_KeyDown));
+                                adjacentPiece.PieceImage.RemoveHandler(MouseRightButtonDownEvent, new MouseButtonEventHandler(PieceCluster_MouseRightButtonDown));
+                                adjacentPiece.PieceImage.RemoveHandler(MouseRightButtonUpEvent, new MouseButtonEventHandler(PieceCluster_MouseRightButtonUp));
                             }
                         }
                     }

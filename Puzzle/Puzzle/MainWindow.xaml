@@ -10,9 +10,6 @@
         <Grid.Background>
             <ImageBrush ImageSource="Resources/wood.png"/>
         </Grid.Background>
-        <Canvas Name="canvasRoot">
-            <Image x:Name="image" Height="100" Canvas.Left="196" Canvas.Top="248" Width="100"/>
-
-        </Canvas>
+        <Canvas Name="canvasRoot"/>
     </Grid>
 </Window>
