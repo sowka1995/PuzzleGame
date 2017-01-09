@@ -273,8 +273,8 @@ namespace Puzzle
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            _menuWindow.Close();
+        {      
+            _menuWindow.Visibility = Visibility.Visible;
         }
 
         #endregion

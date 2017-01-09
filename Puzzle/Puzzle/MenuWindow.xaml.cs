@@ -5,18 +5,26 @@ using Puzzle.Class;
 namespace Puzzle
 {
     /// <summary>
-    /// Interaction logic for MenuWindow.xaml
+    /// Klasa zawierająca logikę dla MenuWindow.xaml
     /// </summary>
     public partial class MenuWindow : Window
     {
         private BitmapImage _sourcePicture;
 
+        /// <summary>
+        /// Kontruktor
+        /// </summary>
         public MenuWindow() 
         {
             InitializeComponent();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Event odpowiadający za wybieranie obrazka 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void startButton_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             openFileDialog.Filter = "Photo|*.png;*.jpg;*.jpeg";
@@ -28,9 +36,8 @@ namespace Puzzle
                 Photo insertedPhoto = new Photo(openFileDialog.FileName);
                 insertedPhoto.preapre();
                 _sourcePicture = insertedPhoto.getBitmapImage();
-
-
             }
+            Visibility = Visibility.Hidden;
 
             MainWindow mainWindow = new MainWindow(this);
             mainWindow.Show();
@@ -38,8 +45,12 @@ namespace Puzzle
             mainWindow.CreateAndDisplayPuzzle();
         }
 
-
-        private void button1_Click_1(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void closeButton_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
