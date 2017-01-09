@@ -8,10 +8,19 @@ using System.Windows.Media.Imaging;
 
 namespace Puzzle.Class
 {
+    /// <summary>
+    /// Klasa będąca "silnikiem" aplikacji
+    /// </summary>
     internal class Engine
     {
+       
         private static readonly Random _random = new Random();
 
+        /// <summary>
+        /// Metoda odpowiadająca za dzielenie obrazak na kawałki
+        /// </summary>
+        /// <param name="image">Obrazek do pocięcia</param>
+        /// <returns>Lista pociętych kawałków</returns>
         public static List<CroppedBitmap> CutImageToPieces(BitmapImage image)
         {
             List<CroppedBitmap> piecesBitmaps = new List<CroppedBitmap>();
@@ -30,6 +39,11 @@ namespace Puzzle.Class
             return piecesBitmaps;
         }
 
+        /// <summary>
+        /// Metoda ustalająca ID sąsiednich kawałków puzzli danego puzzla
+        /// </summary>
+        /// <param name="adjacentCoordinates">Współrzędne puzzla</param>
+        /// <returns>ID sąsiednich kawałków puzzli</returns>
         public static List<int> DetermineAdjacentPieceIDs(List<Coordinate> adjacentCoordinates)
         {
             List<int> adjacentPieceIDs = new List<int>();
@@ -48,6 +62,12 @@ namespace Puzzle.Class
             return adjacentPieceIDs;
         }
 
+        /// <summary>
+        /// Metoda rozstrzygająca czy puzzle pasują do siebie oraz czy są na tyle blisko by je scalić/złączyć
+        /// </summary>
+        /// <param name="currentPiece">Aktualny puzzel</param>
+        /// <param name="adjacentPiece">Sąsiedni puzzel</param>
+        /// <returns>True - jeśli puzzle pasują do siebie, False - jeśli nie pasują, bądź są za daleko od siebie</returns>
         public static bool DetermineIfMergePieces(Piece currentPiece, Piece adjacentPiece)
         {
             // jeżeli obrót jest różny od 0 to nie można scalić dwóch kawałków
@@ -82,6 +102,10 @@ namespace Puzzle.Class
             return false;
         }
 
+        /// <summary>
+        /// Metoda odpowiadająca za wyrównywanie scalonych puzzli
+        /// </summary>
+        /// <param name="cluster">Referencja do klastra w których puzzle mają być wyrównane</param>
         public static void AlignPiecesPositions(ref Cluster cluster)
         {
             Piece mainPiece = cluster.Pieces[0];
@@ -102,6 +126,11 @@ namespace Puzzle.Class
             }
         }
 
+        /// <summary>
+        /// Metoda usuwająca efekt cienia pod puzzlami
+        /// </summary>
+        /// <param name="cluster">Klaster z którego cień usunąć</param>
+        /// <param name="zindex"></param>
         public static void DeleteShadowEffect(Cluster cluster, ref int zindex)
         {
             if (cluster == null)
@@ -115,6 +144,10 @@ namespace Puzzle.Class
             zindex++;
         }
 
+        /// <summary>
+        /// Metoda pokazująca cień pod puzzlami
+        /// </summary>
+        /// <param name="cluster">Klaster puzzli dla których pokazać cień</param>
         public static void DropShadowEffect(Cluster cluster)
         {
             if (cluster == null)
@@ -133,6 +166,10 @@ namespace Puzzle.Class
             }
         }
 
+        /// <summary>
+        /// Metoda obracająca pojedynczy puzzel o losowy kąt (0, 90, 180, 270)
+        /// </summary>
+        /// <param name="pieceToRotate">Kawałek puzzli do obracania</param>
         public static void RotatePieceRandom(ref Piece pieceToRotate)
         {
             Matrix matrix = pieceToRotate.PieceImage.RenderTransform.Value;

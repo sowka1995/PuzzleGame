@@ -18,7 +18,7 @@ using Puzzle.Class;
 namespace Puzzle
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Zawiera logikę dla MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
@@ -77,6 +77,10 @@ namespace Puzzle
 
         #endregion 
 
+        /// <summary>
+        /// Kontruktor
+        /// </summary>
+        /// <param name="menuWindow">Referencja do okna Menu aplikacji</param>
         public MainWindow(Window menuWindow)
         {
             InitializeComponent();
@@ -88,13 +92,13 @@ namespace Puzzle
             _random = new Random();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         #region Events
 
+        /// <summary>
+        /// Event odpowiadający za przesuwanie puzzli
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PieceCluster_MouseMove(object sender, MouseEventArgs e)
         {
             if (_canMovePiece && e.LeftButton == MouseButtonState.Pressed)
@@ -112,6 +116,11 @@ namespace Puzzle
             }
         }
 
+        /// <summary>
+        /// Event odpowiadający za wykrycie i przygotowanie "złapanego" puzzla do przesuwania 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PieceCluster_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Hand;
@@ -125,7 +134,7 @@ namespace Puzzle
             {
                 foreach (Piece piece in cluster.Pieces)
                 {
-                    if (piece.Id == pieceId)
+                    if (piece.ID == pieceId)
                     {
                         _currentCluster = cluster;
                         break;
@@ -136,6 +145,11 @@ namespace Puzzle
             Engine.DropShadowEffect(_currentCluster);
         }
 
+        /// <summary>
+        /// Event odpowiadający za przygotowanie puzzla do obracania
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PieceCluster_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             Image image = sender as Image;
@@ -145,6 +159,11 @@ namespace Puzzle
             Keyboard.Focus(_currentFocusImage);
         }
 
+        /// <summary>
+        /// Event kończący proces obracania puzzla
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PieceCluster_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (_currentFocusImage != null)
@@ -154,11 +173,21 @@ namespace Puzzle
             }
         }
 
+        /// <summary>
+        /// Event odpowiadający za scalanie puzzli
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PieceCluster_MouseUp(object sender, MouseButtonEventArgs e)
         {
             CheckAndMergePieces();
         }
 
+        /// <summary>
+        /// Event odpowiadający za obracanie puzzla poprzez scrolla
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PieceCluster_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             Image pieceImage = sender as Image;
@@ -196,6 +225,11 @@ namespace Puzzle
             }
         }
 
+        /// <summary>
+        /// Event odpowiadający za obracanie puzzla za pomocą strzałek (lewo/prawo)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PieceCluster_KeyDown(object sender, KeyEventArgs e)
         {
             Image pieceImage = sender as Image;
@@ -233,15 +267,23 @@ namespace Puzzle
             }
         }
 
+        /// <summary>
+        /// Event odpowiadający za zamknięcie okna
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _menuWindow.Visibility = Visibility.Visible;
+            _menuWindow.Close();
         }
 
         #endregion
 
         #region HelperMethods
 
+        /// <summary>
+        /// Główna metoda tworząca i wyświetlająca puzzle
+        /// </summary>
         public void CreateAndDisplayPuzzle()
         {
             int pieceId = 0;
@@ -265,7 +307,7 @@ namespace Puzzle
 
                     Piece piece = new Piece()
                     {
-                        Id = pieceId,
+                        ID = pieceId,
                         ClusterId = pieceId,
                         AdjacentPieceIDs = adjacentPieceIDs,
                         Location = new Coordinate(col, row),
@@ -291,11 +333,19 @@ namespace Puzzle
             }
         }
 
+        /// <summary>
+        /// Metoda ustawiająca obrazek z którego generowane są puzzle
+        /// </summary>
+        /// <param name="sourcePicture">Obrazek źródłowy</param>
         public void SetSourcePicture(BitmapImage sourcePicture)
         {
             _sourcePicture = sourcePicture;
         }
 
+        /// <summary>
+        /// Metoda dokonująca inicjalizacji pojedynczego kawałka puzzli
+        /// </summary>
+        /// <param name="piece">Kawałek puzzli</param>
         private void InitPiece(Piece piece)
         {
             Image pieceImage = new Image
@@ -303,7 +353,7 @@ namespace Puzzle
                 Source = piece.Picture,
                 Width = piece.Width,
                 Height = piece.Height,
-                Name = "p" + piece.Id
+                Name = "p" + piece.ID
             };
             pieceImage.FocusVisualStyle = null;
 
@@ -322,6 +372,10 @@ namespace Puzzle
             Canvas.SetTop(pieceImage, _random.Next(0, (int)(mainGrid.ActualHeight - pieceImage.Height)));
         }
 
+        /// <summary>
+        /// Metoda usuwająca klaster/grupę puzzli
+        /// </summary>
+        /// <param name="clusterId">Id klastra do usunięcia</param>
         private void RemoveClusterById(int clusterId)
         {
             for (int i = 0; i < _clusters.Count; i++)
@@ -334,13 +388,18 @@ namespace Puzzle
             }
         }
 
+        /// <summary>
+        /// Metoda zwracająca kawałek puzzli
+        /// </summary>
+        /// <param name="pieceId">Id kawałka puzzli</param>
+        /// <returns></returns>
         private Piece GetPieceById(int pieceId)
         {
             foreach (Cluster cluster in _clusters)
             {
                 foreach (Piece piece in cluster.Pieces)
                 {
-                    if (piece.Id == pieceId)
+                    if (piece.ID == pieceId)
                         return piece;
                 }
             }
@@ -348,6 +407,11 @@ namespace Puzzle
             return null;
         }
 
+        /// <summary>
+        /// Metoda zwracająca klaster/grupę puzzli
+        /// </summary>
+        /// <param name="clusterId">Id klastra/grupy puzzli</param>
+        /// <returns></returns>
         private Cluster GetClusterById(int clusterId)
         {
             foreach (Cluster cluster in _clusters)
@@ -361,6 +425,9 @@ namespace Puzzle
             return null;
         }
 
+        /// <summary>
+        /// Metoda sprawdza czy są jakieś puzzle do złączenia, jeśli tak to je łączy
+        /// </summary>
         private void CheckAndMergePieces()
         {
             Mouse.OverrideCursor = Cursors.Arrow;
@@ -393,7 +460,7 @@ namespace Puzzle
                                     piece.ClusterId = currentPiece.ClusterId;
                                 }
 
-                                // usuwanie zbędnęgo już obracania kawałka puzzli po ich złączeniu (jeżeli złączono to muszą być już obrócone w dobrą stronę)
+                                // usuwanie zbędnych Eventów (jeżeli złączono to muszą być już obrócone w dobrą stronę)
                                 currentPiece.PieceImage.RemoveHandler(MouseWheelEvent, new MouseWheelEventHandler(PieceCluster_MouseWheel));
                                 currentPiece.PieceImage.RemoveHandler(KeyDownEvent, new KeyEventHandler(PieceCluster_KeyDown));
                                 currentPiece.PieceImage.RemoveHandler(MouseRightButtonDownEvent, new MouseButtonEventHandler(PieceCluster_MouseRightButtonDown));

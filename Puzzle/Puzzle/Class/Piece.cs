@@ -12,7 +12,7 @@ namespace Puzzle.Class
         /// <summary>
         /// ID kawałka puzzli
         /// </summary>
-        public int Id { get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// ID klastra do którego należy kawałek puzzli
