@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Puzzle.Class;
+using Puzzle.Interfaces;
 
 namespace Puzzle
 {
@@ -74,7 +75,11 @@ namespace Puzzle
         /// </summary>
         private int _zindex = 1;
 
-
+        /// <summary>
+        /// Silnik puzzli
+        /// </summary>
+        private IPuzzleEngine _engine;
+        
         #endregion 
 
         /// <summary>
@@ -90,6 +95,7 @@ namespace Puzzle
             _clusters = new List<Cluster>();
             _canMovePiece = false;
             _random = new Random();
+            _engine = new Engine();
         }
 
         #region Events
@@ -111,7 +117,6 @@ namespace Puzzle
                     Canvas.SetLeft(piece.PieceImage, Canvas.GetLeft(piece.PieceImage) - offset.X);
                     Canvas.SetTop(piece.PieceImage, Canvas.GetTop(piece.PieceImage) - offset.Y);
                 }
-
                 _previousMousePosition = tmpPosition;
             }
         }
@@ -142,7 +147,7 @@ namespace Puzzle
                 }
             }
 
-            Engine.DropShadowEffect(_currentCluster);
+            _engine.DropShadowEffect(_currentCluster);
         }
 
         /// <summary>
@@ -289,7 +294,7 @@ namespace Puzzle
             int pieceId = 0;
             int pieceCount = 0;
 
-            var pieces = Engine.CutImageToPieces(_sourcePicture);
+            var pieces = _engine.CutImageToPieces(_sourcePicture);
 
             for (int row = 0; row < PuzzleSettings.NUM_ROWS; row++)
             {
@@ -303,7 +308,7 @@ namespace Puzzle
                         new Coordinate(col, row - 1)
                     };
 
-                    List<int> adjacentPieceIDs = Engine.DetermineAdjacentPieceIDs(adjacentCoordinates);
+                    List<int> adjacentPieceIDs = _engine.DetermineAdjacentPieceIDs(adjacentCoordinates);
 
                     Piece piece = new Piece()
                     {
@@ -317,7 +322,7 @@ namespace Puzzle
                     };
 
                     InitPiece(piece);
-                    Engine.RotatePieceRandom(ref piece);
+                    _engine.RotatePieceRandom(piece);
 
                     Cluster cluster = new Cluster()
                     {
@@ -431,7 +436,7 @@ namespace Puzzle
         private void CheckAndMergePieces()
         {
             Mouse.OverrideCursor = Cursors.Arrow;
-            Engine.DeleteShadowEffect(_currentCluster, ref _zindex);
+            _engine.DeleteShadowEffect(_currentCluster, ref _zindex);
 
             if (_canMovePiece && !_isSolved)
             {
@@ -448,7 +453,7 @@ namespace Puzzle
 
                         if (adjacentPiece != null && adjacentPiece.ClusterId != currentPiece.ClusterId)
                         {
-                            if (Engine.DetermineIfMergePieces(currentPiece, adjacentPiece))
+                            if (_engine.DetermineIfMergePieces(currentPiece, adjacentPiece))
                             {
                                 Cluster adjacentCluster = GetClusterById(adjacentPiece.ClusterId);
 
@@ -484,7 +489,7 @@ namespace Puzzle
                         {
                             _currentCluster.Pieces.Add(piece);
                         }
-                        Engine.AlignPiecesPositions(ref _currentCluster);
+                        _engine.AlignPiecesPositions(_currentCluster);
 
                         RemoveClusterById(clusterId);
                     }

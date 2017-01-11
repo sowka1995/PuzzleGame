@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Puzzle.Interfaces;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
@@ -7,7 +8,7 @@ namespace Puzzle.Class
     /// <summary>
     /// Klasa reprezentująca kawałek puzzli
     /// </summary>
-    internal class Piece : IPiece
+    internal class Piece : IPuzzlePiece
     {
         /// <summary>
         /// ID kawałka puzzli

@@ -1,9 +1,11 @@
-﻿namespace Puzzle.Class
+﻿using Puzzle.Class;
+
+namespace Puzzle.Interfaces
 {
     /// <summary>
     /// Interfejs kawałka puzzli
     /// </summary>
-    internal interface IPiece
+    internal interface IPuzzlePiece
     {
         /// <summary>
         /// Opisuje unikalne id kawałka puzzli

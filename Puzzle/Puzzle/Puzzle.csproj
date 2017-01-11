@@ -70,7 +70,8 @@
     </Compile>
     <Compile Include="Class\Coordinate.cs" />
     <Compile Include="Class\Engine.cs" />
-    <Compile Include="Class\IPiece.cs" />
+    <Compile Include="Interfaces\IPuzzleEngine.cs" />
+    <Compile Include="Interfaces\IPuzzlePiece.cs" />
     <Compile Include="Class\Photo.cs" />
     <Compile Include="Class\Piece.cs" />
     <Compile Include="Class\Cluster.cs" />
