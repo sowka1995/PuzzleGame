@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Class\Coordinate.cs" />
     <Compile Include="Class\Engine.cs" />
+    <Compile Include="Interfaces\IPuzzleCluster.cs" />
     <Compile Include="Interfaces\IPuzzleEngine.cs" />
     <Compile Include="Interfaces\IPuzzlePiece.cs" />
     <Compile Include="Class\Photo.cs" />

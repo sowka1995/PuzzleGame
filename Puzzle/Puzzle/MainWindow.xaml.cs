@@ -38,12 +38,12 @@ namespace Puzzle
         /// <summary>
         /// Aktualnie przenoszony klaster
         /// </summary>
-        private Cluster _currentCluster;
+        private IPuzzleCluster _currentCluster;
 
         /// <summary>
         /// Przechowuje wszystkie klastry puzzli
         /// </summary>
-        private List<Cluster> _clusters;
+        private List<IPuzzleCluster> _clusters;
 
         /// <summary>
         /// Służy do generowania losowej pozycji dla kawałka puzzli
@@ -92,7 +92,7 @@ namespace Puzzle
 
             _menuWindow = menuWindow;
             _previousMousePosition = Mouse.GetPosition(mainGrid);
-            _clusters = new List<Cluster>();
+            _clusters = new List<IPuzzleCluster>();
             _canMovePiece = false;
             _random = new Random();
             _engine = new Engine();
@@ -310,7 +310,7 @@ namespace Puzzle
 
                     List<int> adjacentPieceIDs = _engine.DetermineAdjacentPieceIDs(adjacentCoordinates);
 
-                    Piece piece = new Piece()
+                    var piece = new Piece()
                     {
                         ID = pieceId,
                         ClusterId = pieceId,
@@ -324,10 +324,10 @@ namespace Puzzle
                     InitPiece(piece);
                     _engine.RotatePieceRandom(piece);
 
-                    Cluster cluster = new Cluster()
+                    var cluster = new Cluster()
                     {
-                        Id = pieceId,
-                        Pieces = new List<Piece>() { piece }
+                        ID = pieceId,
+                        Pieces = new List<IPuzzlePiece>() { piece }
                     };
 
                     _clusters.Add(cluster);
@@ -351,7 +351,7 @@ namespace Puzzle
         /// Metoda dokonująca inicjalizacji pojedynczego kawałka puzzli
         /// </summary>
         /// <param name="piece">Kawałek puzzli</param>
-        private void InitPiece(Piece piece)
+        private void InitPiece(IPuzzlePiece piece)
         {
             Image pieceImage = new Image
             {
@@ -385,7 +385,7 @@ namespace Puzzle
         {
             for (int i = 0; i < _clusters.Count; i++)
             {
-                if (_clusters[i].Id == clusterId)
+                if (_clusters[i].ID == clusterId)
                 {
                     _clusters.RemoveAt(i);
                     break;
@@ -421,7 +421,7 @@ namespace Puzzle
         {
             foreach (Cluster cluster in _clusters)
             {
-                if (cluster.Id == clusterId)
+                if (cluster.ID == clusterId)
                 {
                     return cluster;
                 }
@@ -445,7 +445,7 @@ namespace Puzzle
                 // łączenie puzzli
                 for (int i = 0; i < _currentCluster.Pieces.Count; i++)
                 {
-                    Piece currentPiece = _currentCluster.Pieces[i];
+                    Piece currentPiece = _currentCluster.Pieces[i] as Piece;
 
                     foreach (int pieceId in currentPiece.AdjacentPieceIDs)
                     {
@@ -457,7 +457,7 @@ namespace Puzzle
                             {
                                 Cluster adjacentCluster = GetClusterById(adjacentPiece.ClusterId);
 
-                                adjacentClusterIDs.Add(adjacentCluster.Id);
+                                adjacentClusterIDs.Add(adjacentCluster.ID);
 
                                 // Aktualizacja ClusterId dla kawałków w sąsiędnim klastrze
                                 foreach (Piece piece in adjacentCluster.Pieces)

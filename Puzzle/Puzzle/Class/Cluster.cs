@@ -1,20 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Puzzle.Interfaces;
+using System.Collections.Generic;
 
 namespace Puzzle.Class
 {
     /// <summary>
     /// Klasa reprezentująca grupę złączonych kawałków puzzli
     /// </summary>
-    internal class Cluster
+    internal class Cluster : IPuzzleCluster
     {
         /// <summary>
         /// Id klastra (złączonych kawałków puzzli)
         /// </summary>
-        public int Id { get; set; }
+        public int ID { get; set; }
 
         /// <summary>
         /// Lista kawałków należących do danego klastra
         /// </summary>
-        public List<Piece> Pieces { get; set; }
+        public List<IPuzzlePiece> Pieces { get; set; }
     }
 }

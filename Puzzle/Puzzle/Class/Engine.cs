@@ -68,7 +68,7 @@ namespace Puzzle.Class
         /// <param name="currentPiece">Aktualny puzzel</param>
         /// <param name="adjacentPiece">Sąsiedni puzzel</param>
         /// <returns>True - jeśli puzzle pasują do siebie, False - jeśli nie pasują, bądź są za daleko od siebie</returns>
-        public bool DetermineIfMergePieces(Piece currentPiece, Piece adjacentPiece)
+        public bool DetermineIfMergePieces(IPuzzlePiece currentPiece, IPuzzlePiece adjacentPiece)   
         {
             // jeżeli obrót jest różny od 0 to nie można scalić dwóch kawałków
             if (currentPiece.Rotation != 0 || adjacentPiece.Rotation != 0)
@@ -106,9 +106,9 @@ namespace Puzzle.Class
         /// Metoda odpowiadająca za wyrównywanie scalonych puzzli
         /// </summary>
         /// <param name="cluster">Referencja do klastra w których puzzle mają być wyrównane</param>
-        public void AlignPiecesPositions(Cluster cluster)
+        public void AlignPiecesPositions(IPuzzleCluster cluster)
         {
-            Piece mainPiece = cluster.Pieces[0];
+            var mainPiece = cluster.Pieces[0] as Piece;
 
             foreach (Piece piece in cluster.Pieces)
             {
@@ -131,7 +131,7 @@ namespace Puzzle.Class
         /// </summary>
         /// <param name="cluster">Klaster z którego cień usunąć</param>
         /// <param name="zindex"></param>
-        public void DeleteShadowEffect(Cluster cluster, ref int zindex)
+        public void DeleteShadowEffect(IPuzzleCluster cluster, ref int zindex)
         {
             if (cluster == null)
                 return;
@@ -148,7 +148,7 @@ namespace Puzzle.Class
         /// Metoda pokazująca cień pod puzzlami
         /// </summary>
         /// <param name="cluster">Klaster puzzli dla których pokazać cień</param>
-        public void DropShadowEffect(Cluster cluster)
+        public void DropShadowEffect(IPuzzleCluster cluster)
         {
             if (cluster == null)
                 return;
@@ -170,7 +170,7 @@ namespace Puzzle.Class
         /// Metoda obracająca pojedynczy puzzel o losowy kąt (0, 90, 180, 270)
         /// </summary>
         /// <param name="pieceToRotate">Kawałek puzzli do obracania</param>
-        public void RotatePieceRandom(Piece pieceToRotate)
+        public void RotatePieceRandom(IPuzzlePiece pieceToRotate)
         {
             Matrix matrix = pieceToRotate.PieceImage.RenderTransform.Value;
 

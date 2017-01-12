@@ -19,7 +19,7 @@ namespace Puzzle.Interfaces
         /// <param name="current"></param>
         /// <param name="adjacent"></param>
         /// <returns></returns>
-        bool DetermineIfMergePieces(Piece current, Piece adjacent);
+        bool DetermineIfMergePieces(IPuzzlePiece current, IPuzzlePiece adjacent);
        
         /// <summary>
         /// Metoda do określania ID sąsiednich puzzli
@@ -32,25 +32,25 @@ namespace Puzzle.Interfaces
         /// Metoda do wyrównywania pozycji puzzli
         /// </summary>
         /// <param name="cluster"></param>
-        void AlignPiecesPositions(Cluster cluster);
+        void AlignPiecesPositions(IPuzzleCluster cluster);
         
         /// <summary>
         /// Metoda do usuwania cienia pod puzzlami
         /// </summary>
         /// <param name="cluster"></param>
         /// <param name="zindex"></param>
-        void DeleteShadowEffect(Cluster cluster, ref int zindex);
+        void DeleteShadowEffect(IPuzzleCluster cluster, ref int zindex);
         
         /// <summary>
         /// Metoda do pokazywania cienia pod puzzlami
         /// </summary>
         /// <param name="cluster"></param>
-        void DropShadowEffect(Cluster cluster);
+        void DropShadowEffect(IPuzzleCluster cluster);
         
         /// <summary>
         /// Metoda do obracania puzzli
         /// </summary>
         /// <param name="piece"></param>
-        void RotatePieceRandom(Piece piece);
+        void RotatePieceRandom(IPuzzlePiece piece);
     }
 }
