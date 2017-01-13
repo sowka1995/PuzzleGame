@@ -36,13 +36,15 @@ namespace Puzzle
                 Photo insertedPhoto = new Photo(openFileDialog.FileName);
                 insertedPhoto.preapre();
                 _sourcePicture = insertedPhoto.getBitmapImage();
-            }
-            Visibility = Visibility.Hidden;
 
-            MainWindow mainWindow = new MainWindow(this);
-            mainWindow.Show();
-            mainWindow.SetSourcePicture(_sourcePicture);
-            mainWindow.CreateAndDisplayPuzzle();
+                Visibility = Visibility.Hidden;
+
+                MainWindow mainWindow = new MainWindow(this);
+                mainWindow.Show();
+                mainWindow.SetSourcePicture(_sourcePicture);
+                mainWindow.CreateAndDisplayPuzzle();
+            }
+           
         }
 
         /// <summary>
