@@ -21,18 +21,16 @@ namespace Puzzle.Class
         /// </summary>
         /// <param name="image">Obrazek do pocięcia</param>
         /// <returns>Lista pociętych kawałków</returns>
-        public static List<CroppedBitmap> CutImageToPieces(BitmapImage image)
+        public static List<CroppedBitmap> CutImageToPieces(Photo photo, int puzzleSize)
         {
             List<CroppedBitmap> piecesBitmaps = new List<CroppedBitmap>();
+            BitmapImage bitmapImage = photo.getBitmapImage();
 
-            int pieceWidth = Convert.ToInt32(image.PixelWidth / PuzzleSettings.NUM_COLUMNS);
-            int pieceHeight = Convert.ToInt32(image.PixelHeight/ PuzzleSettings.NUM_ROWS);
-
-            for (int i = 0; i < PuzzleSettings.NUM_ROWS; i++)
+            for (int i = 0; i < photo.getNumberOfRows(puzzleSize); i++)
             {
-                for (int j = 0; j < PuzzleSettings.NUM_COLUMNS; j++)
+                for (int j = 0; j < photo.getNumberOfColumns(puzzleSize); j++)
                 {
-                    piecesBitmaps.Add(new CroppedBitmap(image, new Int32Rect(j * pieceWidth, i * pieceHeight, pieceWidth, pieceHeight)));
+                    piecesBitmaps.Add(new CroppedBitmap(bitmapImage, new Int32Rect(j * puzzleSize, i * puzzleSize, puzzleSize, puzzleSize)));
                 }
             }
 
@@ -44,16 +42,16 @@ namespace Puzzle.Class
         /// </summary>
         /// <param name="adjacentCoordinates">Współrzędne puzzla</param>
         /// <returns>ID sąsiednich kawałków puzzli</returns>
-        public static List<int> DetermineAdjacentPieceIDs(List<Coordinate> adjacentCoordinates)
+        public static List<int> DetermineAdjacentPieceIDs(List<Coordinate> adjacentCoordinates, int numberOfColumns, int numberOfRows)
         {
             List<int> adjacentPieceIDs = new List<int>();
 
             foreach (Coordinate coordinate in adjacentCoordinates)
             {
-                if (coordinate.X >= 0 && coordinate.X < PuzzleSettings.NUM_COLUMNS &&
-                     coordinate.Y >= 0 && coordinate.Y < PuzzleSettings.NUM_ROWS)
+                if (coordinate.X >= 0 && coordinate.X < numberOfColumns &&
+                     coordinate.Y >= 0 && coordinate.Y < numberOfRows)
                 {
-                    int pieceID = (coordinate.Y * PuzzleSettings.NUM_COLUMNS) + coordinate.X;
+                    int pieceID = (coordinate.Y * numberOfColumns) + coordinate.X;
                     adjacentPieceIDs.Add(pieceID);
                 }
             }

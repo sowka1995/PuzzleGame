@@ -74,6 +74,8 @@ namespace Puzzle
         /// </summary>
         private int _zindex = 1;
 
+        private Photo photo;
+        private int puzzleSize;
 
         #endregion 
 
@@ -289,11 +291,11 @@ namespace Puzzle
             int pieceId = 0;
             int pieceCount = 0;
 
-            var pieces = Engine.CutImageToPieces(_sourcePicture);
+            var pieces = Engine.CutImageToPieces(photo, puzzleSize);
 
-            for (int row = 0; row < PuzzleSettings.NUM_ROWS; row++)
+            for (int row = 0; row < photo.getNumberOfRows(puzzleSize); row++)
             {
-                for (int col = 0; col < PuzzleSettings.NUM_COLUMNS; col++)
+                for (int col = 0; col < photo.getNumberOfColumns(puzzleSize); col++)
                 {
                     List<Coordinate> adjacentCoordinates = new List<Coordinate>()
                     {
@@ -303,7 +305,7 @@ namespace Puzzle
                         new Coordinate(col, row - 1)
                     };
 
-                    List<int> adjacentPieceIDs = Engine.DetermineAdjacentPieceIDs(adjacentCoordinates);
+                    List<int> adjacentPieceIDs = Engine.DetermineAdjacentPieceIDs(adjacentCoordinates, photo.getNumberOfColumns(puzzleSize), photo.getNumberOfRows(puzzleSize));
 
                     Piece piece = new Piece()
                     {
@@ -340,6 +342,16 @@ namespace Puzzle
         public void SetSourcePicture(BitmapImage sourcePicture)
         {
             _sourcePicture = sourcePicture;
+        }
+
+        public void SetSourcePhoto(Photo photo)
+        {
+            this.photo = photo;
+        }
+
+        public void SetPuzzleSize(int puzzleSize)
+        {
+            this.puzzleSize = puzzleSize;
         }
 
         /// <summary>

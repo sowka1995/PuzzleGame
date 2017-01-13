@@ -23,7 +23,7 @@ namespace Puzzle.Class
         public Photo(string fullFilePath)
         {
             this.fullFilePath = fullFilePath;
-            this.bitmap = new Bitmap(fullFilePath);
+            bitmap = new Bitmap(fullFilePath);
         }
 
         /// <summary>
@@ -123,13 +123,13 @@ namespace Puzzle.Class
         /// 1. Skaluje odpowiednio zdjęcie tak by można było utworzyć z niego kwadratowe puzzle.
         /// 2. Zmniejsza proporcjonalnie rozmiar zdjęcia tak by mieściło się ono w obszarze roboczym.
         /// </summary>
-        public void preapre()
+        public void preapre(int puzzleSize)
         {
-            if (!this.hasCorrectProportions())
-                this.bitmap = new Bitmap(this.bitmap, this.getScaledSize());
-
-            if(!this.hasCorrectSize())
+            if (!this.hasCorrectSize())
                 this.bitmap = new Bitmap(this.bitmap, this.getDecresedSize());
+
+            if (!this.hasCorrectProportions())
+                this.bitmap = new Bitmap(this.bitmap, this.getScaledSize(puzzleSize));
         }
 
         public BitmapImage getBitmapImage()
@@ -142,6 +142,24 @@ namespace Puzzle.Class
             image.StreamSource = ms;
             image.EndInit();
             return image;
+        }
+
+        // NEW
+        public int getNumberOfRows(int puzzleSize)
+        {
+            return (int)Math.Round((double)bitmap.Height / puzzleSize);
+        }
+
+        // NEW
+        public int getNumberOfColumns(int puzzleSize)
+        {
+            return (int)Math.Round((double)bitmap.Width / puzzleSize);
+        }
+        
+        // NEW
+        public Size getScaledSize(int puzzleSize)
+        {
+            return new Size(getNumberOfColumns(puzzleSize) * puzzleSize, getNumberOfRows(puzzleSize) * puzzleSize);
         }
     }
 }
