@@ -336,6 +336,8 @@ namespace Puzzle
                     pieceCount++;
                 }
             }
+
+            ShowHintImage();
         }
 
         /// <summary>
@@ -345,6 +347,23 @@ namespace Puzzle
         public void SetSourcePicture(BitmapImage sourcePicture)
         {
             _sourcePicture = sourcePicture;
+        }
+
+        private void ShowHintImage()
+        {
+            Image hintImage = new Image()
+            {
+                Source = _sourcePicture,
+                Width = _sourcePicture.Width,
+                Height = _sourcePicture.Height,
+                Focusable = false,
+                IsEnabled = false,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                OpacityMask = new ImageBrush() { ImageSource = _sourcePicture, Opacity = 0.6d }
+            };
+            Panel.SetZIndex(hintImage, -1);
+            mainGrid.Children.Add(hintImage);        
         }
 
         /// <summary>

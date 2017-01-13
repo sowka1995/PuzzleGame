@@ -12,8 +12,6 @@
             <ImageBrush ImageSource="Resources/backg.png"/>
         </Grid.Background>
         <Button x:Name="startButton" HorizontalAlignment="Right" Margin="0,0,219,156" VerticalAlignment="Bottom" Width="185" RenderTransformOrigin="1.04,0.6" Content="Nowa Gra" Click="startButton_Click" Height="35" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
-        <Image x:Name="image" HorizontalAlignment="Right" Height="221" VerticalAlignment="Bottom" Width="272" Margin="0,0,165,211"/>
-        <Label x:Name="tmpLabel" Content="" HorizontalAlignment="Left" Margin="10,233,0,0" VerticalAlignment="Top"/>
         <Button x:Name="closeButton" Content="Zakończ" HorizontalAlignment="Right" Margin="0,0,219,91" VerticalAlignment="Bottom" Width="185" Click="closeButton_Click" Height="34" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
     </Grid>
 </Window>
