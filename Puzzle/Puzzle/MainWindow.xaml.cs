@@ -132,20 +132,10 @@ namespace Puzzle
             Image pieceImage = sender as Image;
 
             int pieceId = int.Parse(pieceImage.Name.Substring(1)); // id z nazwy 
+            _currentCluster = GetClusterContainsPiece(pieceId);
+
             _previousMousePosition = e.GetPosition(this);
             _canMovePiece = true;
-
-            foreach (Cluster cluster in _clusters)
-            {
-                foreach (Piece piece in cluster.Pieces)
-                {
-                    if (piece.ID == pieceId)
-                    {
-                        _currentCluster = cluster;
-                        break;
-                    }
-                }
-            }
 
             _engine.DropShadowEffect(_currentCluster);
         }
@@ -161,6 +151,7 @@ namespace Puzzle
             image.Focusable = true;
             _currentFocusImage = image;
 
+            Panel.SetZIndex(image, _zindex++);
             Keyboard.Focus(_currentFocusImage);
         }
 
@@ -195,10 +186,11 @@ namespace Puzzle
         /// <param name="e"></param>
         private void PieceCluster_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Image pieceImage = sender as Image;
+            Image pieceImage = sender as Image;       
 
             if (pieceImage != null)
             {
+                Panel.SetZIndex(pieceImage, _zindex++);
                 Matrix matrix = pieceImage.RenderTransform.Value;
 
                 int pieceId = int.Parse(pieceImage.Name.Substring(1)); // id z nazwy 
@@ -241,6 +233,7 @@ namespace Puzzle
 
             if (pieceImage != null && Mouse.RightButton == MouseButtonState.Pressed)
             {
+                Panel.SetZIndex(pieceImage, _zindex++);
                 Matrix matrix = pieceImage.RenderTransform.Value;
 
                 int pieceId = int.Parse(pieceImage.Name.Substring(1)); // id z nazwy 
@@ -431,6 +424,22 @@ namespace Puzzle
             return null;
         }
 
+        private Cluster GetClusterContainsPiece(int pieceId)
+        {
+            foreach (Cluster cluster in _clusters)
+            {
+                foreach (Piece piece in cluster.Pieces)
+                {
+                    if (piece.ID == pieceId)
+                    {
+                        return cluster;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Metoda zwracająca klaster/grupę puzzli
         /// </summary>
@@ -457,7 +466,7 @@ namespace Puzzle
             Mouse.OverrideCursor = Cursors.Arrow;
             _engine.DeleteShadowEffect(_currentCluster, ref _zindex);
 
-            if (_canMovePiece && !_isSolved)
+            if (_canMovePiece && !_isSolved && _currentCluster != null)
             {
                 List<int> adjacentClusterIDs = new List<int>();
 
@@ -507,6 +516,7 @@ namespace Puzzle
                         foreach (Piece piece in adjacentCluster.Pieces)
                         {
                             _currentCluster.Pieces.Add(piece);
+                            Panel.SetZIndex(piece.PieceImage, _zindex++);
                         }
                         _engine.AlignPiecesPositions(_currentCluster);
 
