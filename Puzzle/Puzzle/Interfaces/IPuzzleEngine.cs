@@ -11,7 +11,7 @@ namespace Puzzle.Interfaces
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        List<CroppedBitmap> CutImageToPieces(BitmapImage image);
+        List<CroppedBitmap> CutImageToPieces(Photo photo, int puzzleSize);
         
         /// <summary>
         /// Metoda do rozstrzygania czy złączyć puzzle
@@ -26,7 +26,7 @@ namespace Puzzle.Interfaces
         /// </summary>
         /// <param name="coordinates"></param>
         /// <returns></returns>
-        List<int> DetermineAdjacentPieceIDs(List<Coordinate> coordinates);
+        List<int> DetermineAdjacentPieceIDs(List<Coordinate> coordinates, int numberOfColumns, int numberOfRows);
         
         /// <summary>
         /// Metoda do wyrównywania pozycji puzzli

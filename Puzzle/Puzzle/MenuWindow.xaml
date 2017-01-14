@@ -13,5 +13,7 @@
         </Grid.Background>
         <Button x:Name="startButton" HorizontalAlignment="Right" Margin="0,0,219,156" VerticalAlignment="Bottom" Width="185" RenderTransformOrigin="1.04,0.6" Content="Nowa Gra" Click="startButton_Click" Height="35" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
         <Button x:Name="closeButton" Content="Zakończ" HorizontalAlignment="Right" Margin="0,0,219,91" VerticalAlignment="Bottom" Width="185" Click="closeButton_Click" Height="34" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
+        <Slider x:Name="difficultyLevelSlider" HorizontalAlignment="Left" Margin="325,248,0,0" VerticalAlignment="Top" Width="83"/>
+        <Label x:Name="difficultyLevelSliderLabel" Content="Poziom trudności&#xD;&#xA;" HorizontalAlignment="Left" Margin="218,243,0,0" VerticalAlignment="Top" Height="32"/>
     </Grid>
 </Window>

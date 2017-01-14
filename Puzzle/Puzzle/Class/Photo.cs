@@ -11,19 +11,18 @@ namespace Puzzle.Class
     public class Photo
     {
         /// <summary>
-        /// Pełna ścieżka do pliku zdjęcia na dysku.
-        /// </summary>
-        private string fullFilePath;
-
-        /// <summary>
         /// Bitmapa przechowująca zawartość zdjęcia.
         /// </summary>
         private Bitmap bitmap { get; set; }
 
-        public Photo(string fullFilePath)
+        public Photo(string filePath)
         {
-            this.fullFilePath = fullFilePath;
-            this.bitmap = new Bitmap(fullFilePath);
+            bitmap = new Bitmap(filePath);
+        }
+
+        public Photo(Bitmap bitmap)
+        {
+            this.bitmap = new Bitmap(bitmap);
         }
 
         /// <summary>
@@ -32,16 +31,7 @@ namespace Puzzle.Class
         /// <returns></returns>
         private bool hasCorrectSize()
         {
-            return (this.bitmap.Width <= PuzzleSettings.WORKSPACE_WIDTH && this.bitmap.Height <= PuzzleSettings.WORKSPACE_HEIGHT);
-        }
-
-        /// <summary>
-        /// Metoda sprawdza czy zdjęcie ma odpowiednie proporcje by można było utworzyć z niego kwadratowe puzzle.
-        /// </summary>
-        /// <returns></returns>
-        private bool hasCorrectProportions()
-        {
-            return (this.bitmap.Width / PuzzleSettings.NUM_COLUMNS == this.bitmap.Height / PuzzleSettings.NUM_ROWS);
+            return (bitmap.Width <= PuzzleSettings.WORKSPACE_WIDTH && bitmap.Height <= PuzzleSettings.WORKSPACE_HEIGHT);
         }
 
         /// <summary>
@@ -77,45 +67,19 @@ namespace Puzzle.Class
             return new Size(newWidth, newHeight);
         }
         
-        /// <summary>
-        /// Metoda wylicza przeskalowany rozmiar dla zdjęcia tak by można było utworzyć z niego kwadaratowe puzzle.
-        /// </summary>
-        /// <returns></returns>
-        public Size getScaledSize()
+        public int getNumberOfColumns(int puzzleSize)
         {
-            int newWidth = 0;
-            int newHeight = 0;
+            return (int)Math.Round((double)bitmap.Width / puzzleSize);
+        }
 
-            int puzzleWidth = this.bitmap.Width / PuzzleSettings.NUM_COLUMNS;
-            int puzzleHeight = this.bitmap.Height / PuzzleSettings.NUM_ROWS;
+        public int getNumberOfRows(int puzzleSize)
+        {
+            return (int)Math.Round((double)bitmap.Height / puzzleSize);
+        }
 
-            int puzzleSizeDiffrence = Math.Abs(puzzleHeight - puzzleWidth);
-
-            if(puzzleWidth > puzzleHeight)
-            {
-                int newPuzzleWidth = puzzleWidth - puzzleSizeDiffrence / 2;
-                int newPuzzleHeight = puzzleHeight + puzzleSizeDiffrence / 2;
-
-                newWidth = newPuzzleWidth * PuzzleSettings.NUM_COLUMNS;
-                newHeight = newPuzzleHeight * PuzzleSettings.NUM_ROWS;
-            }
-
-            if (puzzleWidth < puzzleHeight)
-            {
-                int newPuzzleWidth = puzzleWidth + puzzleSizeDiffrence / 2;
-                int newPuzzleHeight = puzzleHeight - puzzleSizeDiffrence / 2;
-
-                newWidth = newPuzzleWidth * PuzzleSettings.NUM_COLUMNS;
-                newHeight = newPuzzleHeight * PuzzleSettings.NUM_ROWS;
-            }
-
-            if(puzzleHeight == puzzleWidth)
-            {
-                newWidth = this.bitmap.Width;
-                newHeight = this.bitmap.Height;
-            }
-
-            return new Size(newWidth, newHeight);
+        public Size getScaledSize(int puzzleSize)
+        {
+            return new Size(getNumberOfColumns(puzzleSize) * puzzleSize, getNumberOfRows(puzzleSize) * puzzleSize);
         }
 
         /// <summary>
@@ -123,13 +87,14 @@ namespace Puzzle.Class
         /// 1. Skaluje odpowiednio zdjęcie tak by można było utworzyć z niego kwadratowe puzzle.
         /// 2. Zmniejsza proporcjonalnie rozmiar zdjęcia tak by mieściło się ono w obszarze roboczym.
         /// </summary>
-        public void preapre()
+        public void preapre(int puzzleSize)
         {
-            if (!this.hasCorrectProportions())
-                this.bitmap = new Bitmap(this.bitmap, this.getScaledSize());
-
-            if(!this.hasCorrectSize())
-                this.bitmap = new Bitmap(this.bitmap, this.getDecresedSize());
+            if (!hasCorrectSize())
+            {
+                bitmap = new Bitmap(bitmap, getDecresedSize());
+            }
+            
+            bitmap = new Bitmap(bitmap, getScaledSize(puzzleSize));
         }
 
         public BitmapImage getBitmapImage()

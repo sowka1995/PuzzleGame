@@ -79,7 +79,17 @@ namespace Puzzle
         /// Silnik puzzli
         /// </summary>
         private IPuzzleEngine _engine;
-        
+
+        /// <summary>
+        /// Zdjęcie wczytane do aplikacji
+        /// </summary>
+        private Photo _photo;
+
+        /// <summary>
+        /// Rozmiar puzzla w grze ustalony na podstawie pozimu trudności
+        /// </summary>
+        private int _puzzleSize;
+
         #endregion 
 
         /// <summary>
@@ -287,11 +297,11 @@ namespace Puzzle
             int pieceId = 0;
             int pieceCount = 0;
 
-            var pieces = _engine.CutImageToPieces(_sourcePicture);
+            var pieces = _engine.CutImageToPieces(_photo, _puzzleSize);
 
-            for (int row = 0; row < PuzzleSettings.NUM_ROWS; row++)
+            for (int row = 0; row < _photo.getNumberOfRows(_puzzleSize); row++)
             {
-                for (int col = 0; col < PuzzleSettings.NUM_COLUMNS; col++)
+                for (int col = 0; col < _photo.getNumberOfColumns(_puzzleSize); col++)
                 {
                     List<Coordinate> adjacentCoordinates = new List<Coordinate>()
                     {
@@ -301,7 +311,7 @@ namespace Puzzle
                         new Coordinate(col, row - 1)
                     };
 
-                    List<int> adjacentPieceIDs = _engine.DetermineAdjacentPieceIDs(adjacentCoordinates);
+                    List<int> adjacentPieceIDs = _engine.DetermineAdjacentPieceIDs(adjacentCoordinates, _photo.getNumberOfColumns(_puzzleSize), _photo.getNumberOfRows(_puzzleSize));
 
                     var piece = new Piece()
                     {
@@ -340,6 +350,16 @@ namespace Puzzle
         public void SetSourcePicture(BitmapImage sourcePicture)
         {
             _sourcePicture = sourcePicture;
+        }
+
+        public void SetSourcePhoto(Photo photo)
+        {
+            _photo = photo;
+        }
+
+        public void SetPuzzleSize(int puzzleSize)
+        {
+            _puzzleSize = puzzleSize;
         }
 
         private void ShowHintImage()
@@ -385,8 +405,8 @@ namespace Puzzle
             canvasRoot.Children.Add(pieceImage);
             piece.PieceImage = pieceImage;
 
-            Canvas.SetLeft(pieceImage, _random.Next(0, (int)(mainGrid.ActualWidth - pieceImage.Width)));
-            Canvas.SetTop(pieceImage, _random.Next(0, (int)(mainGrid.ActualHeight - pieceImage.Height)));
+            Canvas.SetLeft(pieceImage, _random.Next(0, (int)(mainGrid.ActualWidth - pieceImage.Width - 50)));
+            Canvas.SetTop(pieceImage, _random.Next(0, (int)(mainGrid.ActualHeight - pieceImage.Height - 50)));
         }
 
         /// <summary>
