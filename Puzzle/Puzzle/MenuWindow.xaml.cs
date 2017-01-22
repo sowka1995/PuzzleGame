@@ -49,8 +49,8 @@ namespace Puzzle
                 mainWindow.SetSourcePhoto(photo);
                 mainWindow.SetPuzzleSize(puzzleSize);
 
-                mainWindow.Width = PuzzleSettings.WORKSPACE_WIDTH + 50;
-                mainWindow.Height = PuzzleSettings.WORKSPACE_HEIGHT + 50;
+                mainWindow.MinWidth = mainWindow.ActualWidth - 20;
+                mainWindow.MinHeight = mainWindow.ActualHeight - 20;
 
                 mainWindow.CreateAndDisplayPuzzle();
             }
