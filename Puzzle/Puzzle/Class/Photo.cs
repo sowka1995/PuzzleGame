@@ -25,6 +25,11 @@ namespace Puzzle.Class
             this.bitmap = new Bitmap(bitmap);
         }
 
+        public Photo(BitmapImage bitmapImage)
+        {
+            this.bitmap = new Bitmap(bitmapImage.StreamSource);
+        }
+
         /// <summary>
         /// Metoda sprawdza czy zdjęcie ma rozmiary mniejsze niż obszar roboczy.
         /// </summary>

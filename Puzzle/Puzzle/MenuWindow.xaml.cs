@@ -9,8 +9,6 @@ namespace Puzzle
     /// </summary>
     public partial class MenuWindow : Window
     {
-        private BitmapImage _sourcePicture;
-
         /// <summary>
         /// Kontruktor
         /// </summary>
@@ -38,14 +36,12 @@ namespace Puzzle
 
                 Photo photo = new Photo(openFileDialog.FileName);
                 photo.preapre(puzzleSize);
-                _sourcePicture = photo.getBitmapImage();
 
                 Visibility = Visibility.Hidden;
 
                 MainWindow mainWindow = new MainWindow(this);
                 mainWindow.Show();
 
-                mainWindow.SetSourcePicture(_sourcePicture);
                 mainWindow.SetSourcePhoto(photo);
                 mainWindow.SetPuzzleSize(puzzleSize);
 

@@ -1,6 +1,7 @@
 ﻿using Puzzle.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -21,10 +22,11 @@ namespace Puzzle.Class
         /// </summary>
         /// <param name="image">Obrazek do pocięcia</param>
         /// <returns>Lista pociętych kawałków</returns>
-        public List<CroppedBitmap> CutImageToPieces(Photo photo, int puzzleSize)
+        public List<CroppedBitmap> CutImageToPieces(BitmapImage image, int puzzleSize)
         {
             List<CroppedBitmap> piecesBitmaps = new List<CroppedBitmap>();
-
+            Photo photo = new Photo(image);        
+                
             for (int i = 0; i < photo.getNumberOfRows(puzzleSize); i++)
             {
                 for (int j = 0; j < photo.getNumberOfColumns(puzzleSize); j++)
@@ -154,7 +156,7 @@ namespace Puzzle.Class
             {
                 piece.PieceImage.Effect = new DropShadowEffect()
                 {
-                    Color = new Color() { A = 2, R = 0, G = 0, B = 0 },
+                    Color = new System.Windows.Media.Color() { A = 2, R = 0, G = 0, B = 0 },
                     Direction = piece.Rotation - 90,
                     ShadowDepth = 1.5d,
                     Opacity = 2,

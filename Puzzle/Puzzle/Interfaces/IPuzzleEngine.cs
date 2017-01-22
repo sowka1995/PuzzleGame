@@ -1,5 +1,6 @@
 ﻿using Puzzle.Class;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Media.Imaging;
 
 namespace Puzzle.Interfaces
@@ -11,7 +12,7 @@ namespace Puzzle.Interfaces
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        List<CroppedBitmap> CutImageToPieces(Photo photo, int puzzleSize);
+        List<CroppedBitmap> CutImageToPieces(BitmapImage image, int puzzleSize);
         
         /// <summary>
         /// Metoda do rozstrzygania czy złączyć puzzle

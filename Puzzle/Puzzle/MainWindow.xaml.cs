@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Puzzle.Class;
 using Puzzle.Interfaces;
 
@@ -49,11 +41,6 @@ namespace Puzzle
         /// Służy do generowania losowej pozycji dla kawałka puzzli
         /// </summary>
         private Random _random;
-
-        /// <summary>
-        /// Przechowuje obrazek z którego generujemy puzzle
-        /// </summary>
-        private BitmapImage _sourcePicture;
 
         /// <summary>
         /// Przechowuje referencję do okienka startowego aplikacji.
@@ -297,7 +284,7 @@ namespace Puzzle
             int pieceId = 0;
             int pieceCount = 0;
 
-            var pieces = _engine.CutImageToPieces(_photo, _puzzleSize);
+            var pieces = _engine.CutImageToPieces(_photo.getBitmapImage(), _puzzleSize);
 
             for (int row = 0; row < _photo.getNumberOfRows(_puzzleSize); row++)
             {
@@ -344,15 +331,6 @@ namespace Puzzle
         }
 
         /// <summary>
-        /// Metoda ustawiająca obrazek z którego generowane są puzzle
-        /// </summary>
-        /// <param name="sourcePicture">Obrazek źródłowy</param>
-        public void SetSourcePicture(BitmapImage sourcePicture)
-        {
-            _sourcePicture = sourcePicture;
-        }
-
-        /// <summary>
         /// Metoda ustawiająca zdjęcie z którego będą generowane puzzle
         /// </summary>
         /// <param name="photo"></param>
@@ -375,17 +353,18 @@ namespace Puzzle
         /// </summary>
         private void ShowHintImage()
         {
+            BitmapImage img = _photo.getBitmapImage();
             Image hintImage = new Image()
             {
                 Name = "hintImage",
-                Source = _sourcePicture,
-                Width = _sourcePicture.Width,
-                Height = _sourcePicture.Height,
+                Source = img,
+                Width = img.Width,
+                Height = img.Height,
                 Focusable = false,
                 IsEnabled = false,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                OpacityMask = new ImageBrush() { ImageSource = _sourcePicture, Opacity = 0.6d }
+                OpacityMask = new ImageBrush() { ImageSource = img, Opacity = 0.6d }
             };
             Panel.SetZIndex(hintImage, -1);
             mainGrid.Children.Add(hintImage);        
