@@ -75,5 +75,10 @@ namespace Puzzle
             difficultyLevelSlider.IsSnapToTickEnabled = true;
             difficultyLevelSlider.TickFrequency = 1;
         }
+
+        private void InstructionButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
