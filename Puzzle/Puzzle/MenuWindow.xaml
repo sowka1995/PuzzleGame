@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Puzzle"
         mc:Ignorable="d"
-        Title="MenuWindow" Width="630" Height="500"
+        Icon="Resources/PuzzleIcon.ico"
+        Title="PuzzleGame" Width="630" Height="500"
         ResizeMode="NoResize">
     <Grid Margin="0,0,2,0">
         <Grid.Background>
