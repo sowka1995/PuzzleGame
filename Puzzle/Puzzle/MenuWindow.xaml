@@ -8,14 +8,20 @@
         Icon="Resources/PuzzleIcon.ico"
         Title="PuzzleGame" Width="630" Height="500"
         ResizeMode="NoResize">
-    <Grid Margin="0,0,2,0" x:Name="MainMenu">
+    <Grid Margin="0,0,2,0" x:Name="MainMenu" KeyDown="MainMenu_KeyDown">
         <Grid.Background>
             <ImageBrush ImageSource="Resources/backg.png"/>
         </Grid.Background>
-        <Button x:Name="startButton" HorizontalAlignment="Right" Margin="0,0,219,154" VerticalAlignment="Bottom" Width="185" RenderTransformOrigin="1.04,0.6" Content="Nowa Gra" Click="startButton_Click" Height="35" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
-        <Button x:Name="closeButton" Content="Zakończ" HorizontalAlignment="Right" Margin="0,0,219,46" VerticalAlignment="Bottom" Width="185" Click="closeButton_Click" Height="34" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
-        <Slider x:Name="difficultyLevelSlider" HorizontalAlignment="Left" Margin="258,248,0,0" VerticalAlignment="Top" Width="102"/>
+        <Button x:Name="startButton" HorizontalAlignment="Right" Margin="0,0,219,154" VerticalAlignment="Bottom" Cursor="Hand" Width="185" RenderTransformOrigin="1.04,0.6" Content="Nowa Gra" Click="startButton_Click" Height="35" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
+        <Button x:Name="closeButton" Content="Zakończ" HorizontalAlignment="Right" Margin="0,0,219,46" Cursor="Hand" VerticalAlignment="Bottom" Width="185" Click="closeButton_Click" Height="34" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman"/>
+        <Slider x:Name="difficultyLevelSlider" HorizontalAlignment="Left" Margin="258,248,0,0" Cursor="Hand" VerticalAlignment="Top" Width="102"/>
         <Label x:Name="difficultyLevelSliderLabel" Content="Poziom trudności&#xD;&#xA;" HorizontalAlignment="Left" Margin="242,216,0,0" VerticalAlignment="Top" Height="32" FontSize="16" RenderTransformOrigin="1.27,0.762" FontFamily="Yu Gothic UI Semibold"/>
-        <Button x:Name="InstructonButton" Content="Instrukcja" HorizontalAlignment="Right" Margin="0,0,219,98" VerticalAlignment="Bottom" Click="InstructionButton_Click" Height="34" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman" Width="185"/>
+        <Button x:Name="InstructonButton" Content="Instrukcja" HorizontalAlignment="Right" Cursor="Hand" Margin="0,0,219,98" VerticalAlignment="Bottom" Click="InstructionButton_Click" Height="34" FontSize="20" FontWeight="Bold" FontFamily="Times New Roman" Width="185"/>
+        <Grid x:Name="InstructionGrid" Visibility="Hidden">
+            <Image x:Name="Instruction" Source="Resources/Instruction.png" Stretch="UniformToFill" HorizontalAlignment="Left" Height="304" VerticalAlignment="Top" Width="452" Margin="82,121,0,0"/>
+            <Label x:Name="BackLabel" Cursor="Hand" HorizontalAlignment="Left" Margin="438,380,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" Foreground="#FF1167FD" MouseDown="BackLabel_MouseDown">
+                <TextBlock TextDecorations="Underline">Powrót</TextBlock>
+            </Label>
+        </Grid>
     </Grid>
 </Window>

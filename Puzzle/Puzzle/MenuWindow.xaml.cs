@@ -74,7 +74,20 @@ namespace Puzzle
 
         private void InstructionButton_Click(object sender, RoutedEventArgs e)
         {
-
+            InstructionGrid.Visibility = Visibility.Visible;
         }
+
+        private void MainMenu_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Escape)
+                InstructionGrid.Visibility = Visibility.Hidden;
+        }
+
+        private void BackLabel_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            InstructionGrid.Visibility = Visibility.Hidden;
+        }
+
+
     }
 }
