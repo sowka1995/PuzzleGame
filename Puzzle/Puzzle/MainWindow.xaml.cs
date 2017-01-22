@@ -352,20 +352,32 @@ namespace Puzzle
             _sourcePicture = sourcePicture;
         }
 
+        /// <summary>
+        /// Metoda ustawiająca zdjęcie z którego będą generowane puzzle
+        /// </summary>
+        /// <param name="photo"></param>
         public void SetSourcePhoto(Photo photo)
         {
             _photo = photo;
         }
 
+        /// <summary>
+        /// Metoda ustawiająca rozmiar puzzli
+        /// </summary>
+        /// <param name="puzzleSize"></param>
         public void SetPuzzleSize(int puzzleSize)
         {
             _puzzleSize = puzzleSize;
         }
 
+        /// <summary>
+        /// Metoda pokazująca zdjęcie w tle
+        /// </summary>
         private void ShowHintImage()
         {
             Image hintImage = new Image()
             {
+                Name = "hintImage",
                 Source = _sourcePicture,
                 Width = _sourcePicture.Width,
                 Height = _sourcePicture.Height,
@@ -444,6 +456,11 @@ namespace Puzzle
             return null;
         }
 
+        /// <summary>
+        /// Metoda zwracająca klaster zawierający dany kawałek puzzla
+        /// </summary>
+        /// <param name="pieceId"></param>
+        /// <returns></returns>
         private Cluster GetClusterContainsPiece(int pieceId)
         {
             foreach (Cluster cluster in _clusters)
@@ -546,6 +563,7 @@ namespace Puzzle
 
                 if (_clusters.Count <= 1)
                 {
+                    mainGrid.Children.RemoveAt(1);
                     MessageBox.Show("Gratulacje, ułożyłeś swoje puzzle!", "Ułożone!!!");
                     _isSolved = true;
                 }
