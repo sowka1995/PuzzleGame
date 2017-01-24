@@ -1,0 +1,16 @@
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\bin\Debug\Puzzle.exe.config
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\bin\Debug\Puzzle.exe
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\bin\Debug\Puzzle.pdb
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle.csprojResolveAssemblyReference.cache
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\MainWindow.g.cs
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\MenuWindow.g.cs
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\App.g.cs
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle_MarkupCompile.cache
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle_MarkupCompile.lref
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\MainWindow.baml
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\MenuWindow.baml
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle.g.resources
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle.Properties.Resources.resources
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle.csproj.GenerateResource.Cache
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle.exe
+C:\Users\Krzysiek\Source\Repos\PuzzleGame\Puzzle\Puzzle\obj\Debug\Puzzle.pdb
